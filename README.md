@@ -11,7 +11,7 @@
 - [x] morgan - HTTP 请求日志中间件。
 - [x] pino - 官方推荐的日志中间件。
 - [x] helmet - 最大程度的确保我们 API 的安全性，应用程序应对多种类型的攻击。
-- [ ] compression - 压缩和处理静态内容。
+- [x] compression - 压缩和处理静态内容。
 - [x] csurf - 先前为 express.csrf。
 - [ ] passport - 用于认证的 Express 中间件模块。
 - [ ] express-jwt - 产生唯一的基于用户信息token
