@@ -15,6 +15,9 @@
 - [x] csurf - 先前为 express.csrf。
 - [ ] passport - 用于认证的 Express 中间件模块。
 - [ ] express-jwt - 产生唯一的基于用户信息token
+- [ ] 限流
+- [ ] 参数校验
+- [ ] 全局错误处理
 
 ## git提交
 
