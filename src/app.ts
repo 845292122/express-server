@@ -45,6 +45,11 @@ app.use(
 // * 业务路由
 app.use(apiRouter)
 
+// * 捕获未处理的路由
+app.use((req, res) => {
+  res.status(404).json({ message: 'Route not found' })
+})
+
 app.listen(3000, () => {
   console.log(`express server is running`)
 })
