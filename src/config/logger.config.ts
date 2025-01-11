@@ -1,11 +1,5 @@
 import morgan from 'morgan'
-import fs from 'fs'
-import path from 'path'
-
-const logStream = fs.createWriteStream(
-  path.join(__dirname, '../../logs/access.log'),
-  { flags: 'a' } // 'a' 表示追加写入
-)
+import logger from '../helper/logger.helper'
 
 // 根据环境选择日志格式
 // const skip = () => {
@@ -14,6 +8,15 @@ const logStream = fs.createWriteStream(
 // }
 
 // 定义 morgan 中间件配置
-export const morganLogger = morgan(':method :url :status :res[content-length] - :response-time ms', {
-  stream: logStream
+export const morganLogger = morgan(':method :url :status :remote-addr - :response-time ms', {
+  stream: {
+    write: message => {
+      const status = parseInt(message.split(' ')[2], 10) // 从日志中提取状态码
+      if (status >= 500) {
+        logger.error(`HTTP Error: ${message.trim()}`) // 错误级别日志
+      } else {
+        logger.info(message.trim()) // 普通信息日志
+      }
+    }
+  }
 })
