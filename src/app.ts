@@ -4,6 +4,7 @@ import cookieParser from 'cookie-parser'
 import helmet from 'helmet'
 import multer from 'multer'
 import { csrfProtection, corsOptions, morganLogger } from './config'
+import apiRouter from './routers'
 
 const app = express()
 
@@ -25,6 +26,9 @@ app.use(cookieParser())
 app.use(express.json())
 app.use(csrfProtection)
 app.use(morganLogger)
+
+// * 业务路由
+app.use(apiRouter)
 
 app.listen(3000, () => {
   console.log(`express server is running`)

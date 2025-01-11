@@ -6,7 +6,6 @@ const logDir = path.join(process.cwd(), 'logs')
 if (!fs.existsSync(logDir)) {
   fs.mkdirSync(logDir, { recursive: true }) // 递归创建
 }
-const logFilePath = path.join(logDir, 'app-%DATE%.log')
 
 const logger = pino({
   level: 'info',
@@ -19,7 +18,8 @@ const logger = pino({
       {
         target: 'pino-rotating-file-stream',
         options: {
-          filename: logFilePath,
+          filename: 'app-%DATE%.log',
+          path: logDir,
           interval: '1d',
           maxFiles: 7,
           compress: true
