@@ -2,9 +2,13 @@ import express from 'express'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import helmet from 'helmet'
+import multer from 'multer'
 import { csrfProtection, corsOptions, morganLogger } from './config'
 
 const app = express()
+
+// 配置 Multer 存储引擎（这里使用内存存储）
+export const upload = multer({ storage: multer.memoryStorage() })
 
 /**
  * * 基础中间件
