@@ -3,6 +3,7 @@ import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import helmet from 'helmet'
 import multer from 'multer'
+import compression from 'compression'
 import { csrfProtection, corsOptions, morganLogger } from './config'
 import apiRouter from './routers'
 
@@ -19,6 +20,7 @@ export const upload = multer({ storage: multer.memoryStorage() })
  * cookieParser(): 解析cookie中间件
  * csrfProtection: csrf中间件
  * morganLogger: 日志中间件
+ * compression: 压缩中间件
  */
 app.use(helmet())
 app.use(cors(corsOptions))
@@ -26,6 +28,19 @@ app.use(cookieParser())
 app.use(express.json())
 app.use(csrfProtection)
 app.use(morganLogger)
+app.use(
+  compression({
+    level: 6, // 压缩级别（0-9，默认是 -1）。数值越高，压缩率越高，但 CPU 占用越多
+    threshold: 1024, // 只有响应体大于 1KB 才启用压缩（默认值）
+    filter: (req, res) => {
+      // 自定义压缩条件
+      if (req.headers['x-no-compression']) {
+        return false // 如果请求头包含 'x-no-compression'，不压缩
+      }
+      return compression.filter(req, res) // 否则使用默认过滤规则
+    }
+  })
+)
 
 // * 业务路由
 app.use(apiRouter)
