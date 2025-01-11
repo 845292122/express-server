@@ -11,6 +11,7 @@
   "author": "Edison.Cheung",
   "license": "MIT",
   "devDependencies": {
+    "@types/cookie-parser": "^1.4.8",
     "@types/cors": "^2.8.17",
     "@types/csurf": "^1.11.5",
     "@types/express": "^5.0.0",
@@ -20,6 +21,7 @@
     "typescript": "^5.7.3"
   },
   "dependencies": {
+    "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "csurf": "^1.11.0",
     "express": "^4.21.2"

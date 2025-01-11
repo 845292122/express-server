@@ -1,6 +1,7 @@
 import express from 'express'
 import cors from 'cors'
-import { corsOptions } from './config/cors.config'
+import cookieParser from 'cookie-parser'
+import { csrfProtection, corsOptions } from './config'
 
 const app = express()
 
@@ -8,9 +9,13 @@ const app = express()
  * * 基础中间件
  * cors: 跨域中间件
  * express.json(): 解析请求体中间件
+ * cookieParser(): 解析cookie中间件
+ * csrfProtection: csrf中间件
  */
 app.use(cors(corsOptions))
+app.use(cookieParser())
 app.use(express.json())
+app.use(csrfProtection)
 
 app.listen(3000, () => {
   console.log(`express server is running`)
