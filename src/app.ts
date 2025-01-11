@@ -1,5 +1,6 @@
 import express from 'express'
 import cors from 'cors'
+import { corsOptions } from './config/cors.config'
 
 const app = express()
 
@@ -8,7 +9,7 @@ const app = express()
  * cors: 跨域中间件
  * express.json(): 解析请求体中间件
  */
-app.use(cors())
+app.use(cors(corsOptions))
 app.use(express.json())
 
 app.listen(3000, () => {
