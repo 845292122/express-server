@@ -14,4 +14,13 @@
 - [ ] compression - 压缩和处理静态内容。
 - [ ] csurf - 先前为 express.csrf。
 - [ ] passport - 用于认证的 Express 中间件模块。
-- [ ] express-jwt - 产生唯一的基于用户信息.令牌
+- [ ] express-jwt - 产生唯一的基于用户信息token
+
+## git提交
+
+- feat: 新增功能
+- fix: 修复bug
+- docs: 文档更新
+- style: 代码格式化
+- refactor: 重构代码
+- chore: 构建过程或辅助工具的变动
