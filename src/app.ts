@@ -1,17 +1,15 @@
 import express from 'express'
+import cors from 'cors'
 
 const app = express()
 
-app.use('/', async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-  console.log(123)
-  await next()
-  console.log(456)
-  res.send('Hello World!')
-})
-
-app.use(async () => {
-  console.log('abc')
-})
+/**
+ * * 基础中间件
+ * cors: 跨域中间件
+ * express.json(): 解析请求体中间件
+ */
+app.use(cors())
+app.use(express.json())
 
 app.listen(3000, () => {
   console.log(`express server is running`)
