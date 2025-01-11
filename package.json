@@ -1,16 +1,23 @@
 {
   "name": "airy-server",
   "version": "1.0.0",
-  "description": "",
+  "description": "基于 express+prisma+mysql 的 nodejs 后端服务",
   "main": "index.js",
   "scripts": {
+    "dev": "nodemon --exec ts-node src/app.ts",
     "format": "prettier --write 'src/**/*.{js,ts}'"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Edison.Cheung",
+  "license": "MIT",
   "devDependencies": {
+    "@types/express": "^5.0.0",
+    "nodemon": "^3.1.9",
     "prettier": "^3.4.2",
+    "ts-node": "^10.9.2",
     "typescript": "^5.7.3"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
   }
 }
