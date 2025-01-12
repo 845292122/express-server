@@ -6,8 +6,18 @@ import multer from 'multer'
 import compression from 'compression'
 import { csrfProtection, corsOptions, morganLogger } from './config'
 import apiRouter from './routers'
+import { BizError } from './common/error'
+import logger from './helper/logger.helper'
 
 const app = express()
+
+// * 返回结果封装
+export const httpOk = <T>(res: express.Response, data: T) => {
+  return res.status(200).json({
+    code: 200,
+    data
+  })
+}
 
 // 配置 Multer 存储引擎（这里使用内存存储）
 export const upload = multer({ storage: multer.memoryStorage() })
@@ -48,6 +58,20 @@ app.use(apiRouter)
 // * 捕获未处理的路由
 app.use((req, res) => {
   res.status(404).json({ message: 'Route not found' })
+})
+
+// * 全局异常处理器
+app.use((err: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
+  if (err instanceof BizError) {
+    res.status(200).json({
+      code: err.code,
+      message: err.message
+    })
+    return
+  }
+
+  logger.error(err.stack)
+  res.status(500).json({ message: 'Internal Server Error' })
 })
 
 app.listen(3000, () => {

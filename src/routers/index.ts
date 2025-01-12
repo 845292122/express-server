@@ -1,6 +1,6 @@
+import { Router } from 'express'
 import accountRouter from './account.router'
 import permRouter from './perm.router'
-import { Router } from 'express'
 
 const router = Router()
 

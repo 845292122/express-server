@@ -1,9 +1,11 @@
 export class BizError extends Error {
-  public statusCode: number
+  public code: number
 
-  constructor(message: string, statusCode: number = 400) {
+  constructor(message: string, code: number = 400) {
     super(message) // 调用父类的构造函数
     this.name = 'BizError' // 错误名称
-    this.statusCode = statusCode // HTTP 状态码
+    this.code = code // 业务状态码
+
+    Object.setPrototypeOf(this, BizError.prototype)
   }
 }
