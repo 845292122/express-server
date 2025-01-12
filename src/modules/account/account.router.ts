@@ -1,17 +1,11 @@
 import { Router } from 'express'
-import logger from '../../helper/logger.helper'
 import replyHelper from '../../helper/reply.helper'
-import { httpOk } from '../../app'
+import accountHandler from './account.handler'
+import { validateMiddleware } from '../../middleware'
+import { createAccountSchema } from './account.schema'
 
 const router = Router()
 
-router.get(
-  '/',
-  replyHelper(async (req, res) => {
-    logger.info('Hello Account!')
-    await new Promise(resolve => setTimeout(resolve, 1000))
-    httpOk(res, 'Hello Account11111!')
-  })
-)
+router.get('/', validateMiddleware(createAccountSchema), replyHelper(accountHandler.create))
 
 export default router
