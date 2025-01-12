@@ -4,10 +4,10 @@ import cookieParser from 'cookie-parser'
 import helmet from 'helmet'
 import multer from 'multer'
 import compression from 'compression'
-import { csrfProtection, corsOptions, morganLogger } from './config'
+import { corsOptions, morganLogger } from './config'
 import apiRouter from './modules'
-import { BizError } from './common/error'
-import logger from './helper/logger.helper'
+import { BizError, NotFoundError } from './common/error'
+import { errorHandler } from './middleware'
 
 // * 捕获同步异常
 process.on('uncaughtException', error => {
@@ -22,7 +22,7 @@ process.on('unhandledRejection', (reason, promise) => {
 const app = express()
 
 // * 返回结果封装
-export const httpOk = <T>(res: express.Response, data: T) => {
+export const httpOk = <T>(res: express.Response, data?: T) => {
   return res.status(200).json({
     code: 200,
     data
@@ -46,7 +46,7 @@ app.use(helmet())
 app.use(cors(corsOptions))
 app.use(cookieParser())
 app.use(express.json())
-app.use(csrfProtection)
+// app.use(csrfProtection)
 app.use(morganLogger)
 app.use(
   compression({
@@ -66,23 +66,12 @@ app.use(
 app.use(apiRouter)
 
 // * 捕获未处理的路由
-app.use((req, res) => {
-  res.status(404).json({ message: 'Route not found' })
+app.use((req, res, next) => {
+  next(new NotFoundError('Route not found'))
 })
 
 // * 全局异常处理器
-app.use((err: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
-  if (err instanceof BizError) {
-    res.status(200).json({
-      code: err.code,
-      message: err.message
-    })
-    return
-  }
-
-  logger.error(err.stack)
-  res.status(500).json({ message: 'Internal Server Error' })
-})
+app.use(errorHandler)
 
 app.listen(3000, () => {
   console.log(`express server is running`)

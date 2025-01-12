@@ -6,6 +6,6 @@ import { createAccountSchema } from './account.schema'
 
 const router = Router()
 
-router.get('/', rateLimiter(), validate(createAccountSchema), replyHelper(accountHandler.create))
+router.post('/create', rateLimiter(), validate(createAccountSchema), replyHelper(accountHandler.create))
 
 export default router

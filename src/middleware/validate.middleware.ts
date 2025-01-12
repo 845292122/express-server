@@ -5,11 +5,17 @@ import { BizError } from '../common/error'
 export const validate = (schema: ZodSchema) => (req: Request, res: Response, next: NextFunction) => {
   Promise.resolve()
     .then(() => {
-      schema.parse({
+      const parsedParams = schema.parse({
         body: req.body,
         query: req.query,
         params: req.params
       })
+
+      req.body = parsedParams.body
+      req.query = parsedParams.query
+      req.params = parsedParams.params
+
+      return parsedParams
     })
     .then(() => next())
     .catch(err => {
