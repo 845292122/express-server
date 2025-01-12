@@ -4,8 +4,8 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Debug TypeScript",
-      "runtimeExecutable": "nodemon", // 修改: 使用 nodemon 作为运行时
+      "name": "Airy Debug",
+      "runtimeExecutable": "nodemon",
       "runtimeArgs": ["-r", "ts-node/register"],
       "args": ["${workspaceFolder}/src/app.ts"],
       "cwd": "${workspaceFolder}",
