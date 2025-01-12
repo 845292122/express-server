@@ -15,10 +15,11 @@
 - [x] csurf - 先前为 express.csrf。
 - [ ] passport - 用于认证的 Express 中间件模块。
 - [ ] express-jwt - 产生唯一的基于用户信息token
-- [ ] 限流
-- [x] 参数校验
+- [x] express-rate-limit - 限流
+- [x] 参数校验 - zod
 - [x] 全局错误处理
 - [x] prisma ORM
+- [ ] 定时任务
 
 ## git提交
 
