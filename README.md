@@ -16,9 +16,9 @@
 - [ ] passport - 用于认证的 Express 中间件模块。
 - [ ] express-jwt - 产生唯一的基于用户信息token
 - [ ] 限流
-- [ ] 参数校验
+- [x] 参数校验
 - [x] 全局错误处理
-- [ ] prisma ORM
+- [x] prisma ORM
 
 ## git提交
 
