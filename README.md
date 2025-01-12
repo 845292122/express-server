@@ -19,7 +19,7 @@
 - [x] 参数校验 - zod
 - [x] 全局错误处理
 - [x] prisma ORM
-- [ ] 定时任务
+- [x] node-schedule - 定时任务
 
 ## git提交
 

@@ -9,6 +9,16 @@ import apiRouter from './modules'
 import { BizError } from './common/error'
 import logger from './helper/logger.helper'
 
+// * 捕获同步异常
+process.on('uncaughtException', error => {
+  console.error('Uncaught Exception:', error)
+})
+
+// * 捕获未处理的 Promise 异常
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('Unhandled Rejection at:', promise, 'reason:', reason)
+})
+
 const app = express()
 
 // * 返回结果封装
