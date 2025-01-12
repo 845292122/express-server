@@ -5,7 +5,7 @@ import helmet from 'helmet'
 import multer from 'multer'
 import compression from 'compression'
 import { csrfProtection, corsOptions, morganLogger } from './config'
-import apiRouter from './routers'
+import apiRouter from './modules'
 import { BizError } from './common/error'
 import logger from './helper/logger.helper'
 
