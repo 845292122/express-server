@@ -6,7 +6,7 @@ import multer from 'multer'
 import compression from 'compression'
 import { corsOptions, morganLogger } from './config'
 import apiRouter from './modules'
-import { BizError, NotFoundError } from './common/error'
+import { NotFoundError } from './common/error'
 import { errorHandler } from './middleware'
 
 // * 捕获同步异常
