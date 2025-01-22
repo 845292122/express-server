@@ -50,5 +50,19 @@ export default {
     })
 
     httpOk(res)
+  },
+
+  remove: async (req: Request, res: Response) => {
+    const id = Number(req.params.id)
+    await PrismaHelper.account.update({
+      where: {
+        id,
+        delFlag: 0
+      },
+      data: {
+        delFlag: 1
+      }
+    })
+    httpOk(res)
   }
 }

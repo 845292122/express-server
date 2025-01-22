@@ -10,5 +10,7 @@ const router = Router()
 router.post('/create', rateLimiter(), validate(inputAccountSchema), replyHelper(accountHandler.create))
 // * 修改账户
 router.post('/modify', rateLimiter(), validate(inputAccountSchema), replyHelper(accountHandler.modify))
+// * 删除账户
+router.post('/remove/:id', rateLimiter(), replyHelper(accountHandler.remove))
 
 export default router
