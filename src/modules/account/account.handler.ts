@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import { httpOk } from '../../app'
 import { AccountType } from './account'
-import { PrismaHelper } from '../../helper/prisma.helper'
+import { convertPageParam, PrismaHelper } from '../../helper/prisma.helper'
 import { BizError } from '../../common/error'
 import bcrypt from 'bcryptjs'
 import { Constant } from '../../common/constant'
@@ -64,5 +64,33 @@ export default {
       }
     })
     httpOk(res)
+  },
+
+  page: async (req: Request, res: Response) => {
+    const { pageNo, pageSize, company } = req.query as {
+      pageNo?: number
+      pageSize?: number
+      company?: string
+    }
+    const pageParam = convertPageParam(pageNo, pageSize)
+    const condition = {
+      delFlag: 0,
+      company: company ?? undefined
+    }
+
+    const [total, records] = await Promise.all([
+      PrismaHelper.account.count({
+        where: condition
+      }),
+      PrismaHelper.account.findMany({
+        where: condition,
+        ...pageParam
+      })
+    ])
+
+    httpOk(res, {
+      total,
+      records
+    })
   }
 }

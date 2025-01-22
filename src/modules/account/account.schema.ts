@@ -7,4 +7,12 @@ export const inputAccountSchema = z.object({
   })
 })
 
+export const pageAccountSchema = z.object({
+  query: z.object({
+    pageNo: z.coerce.number().default(1),
+    pageSize: z.coerce.number().default(10),
+    company: z.coerce.string().optional()
+  })
+})
+
 export type createAccountType = z.infer<typeof inputAccountSchema>['body']
