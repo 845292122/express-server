@@ -6,6 +6,7 @@ import { createAccountSchema } from './account.schema'
 
 const router = Router()
 
+// * 创建账户
 router.post('/create', rateLimiter(), validate(createAccountSchema), replyHelper(accountHandler.create))
 
 export default router
