@@ -15,4 +15,5 @@ export const pageAccountSchema = z.object({
   })
 })
 
-export type createAccountType = z.infer<typeof inputAccountSchema>['body']
+export type CreateAccountType = z.infer<typeof inputAccountSchema>['body']
+export type PageAccountType = z.infer<typeof pageAccountSchema>['query']

@@ -5,6 +5,7 @@ import { convertPageParam, PrismaHelper } from '../../helper/prisma.helper'
 import { BizError } from '../../common/error'
 import bcrypt from 'bcryptjs'
 import { Constant } from '../../common/constant'
+import { PageAccountType } from './account.schema'
 
 export default {
   create: async (req: Request, res: Response) => {
@@ -67,11 +68,7 @@ export default {
   },
 
   page: async (req: Request, res: Response) => {
-    const { pageNo, pageSize, company } = req.query as {
-      pageNo?: number
-      pageSize?: number
-      company?: string
-    }
+    const { pageNo, pageSize, company } = req.query as unknown as PageAccountType
     const pageParam = convertPageParam(pageNo, pageSize)
     const condition = {
       delFlag: 0,
