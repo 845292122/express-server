@@ -13,8 +13,8 @@
 - [x] helmet - 最大程度的确保我们 API 的安全性，应用程序应对多种类型的攻击。
 - [x] compression - 压缩和处理静态内容。
 - [x] csurf - 先前为 express.csrf。
-- [ ] passport - 用于认证的 Express 中间件模块。
-- [ ] express-jwt - 产生唯一的基于用户信息token
+- [x] passport - 用于认证的 Express 中间件模块。
+- [x] express-jwt - 产生唯一的基于用户信息token
 - [x] express-rate-limit - 限流
 - [x] 参数校验 - zod
 - [x] 全局错误处理
