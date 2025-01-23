@@ -10,4 +10,7 @@ const router = Router()
 router.post('/create', rateLimiter(), validate(inputPermSchema), replyHelper(PermHandler.create))
 // * 修改权限
 router.post('/modify', rateLimiter(), validate(inputPermSchema), replyHelper(PermHandler.modify))
+// * 删除权限
+router.post('/remove', rateLimiter(), replyHelper(PermHandler.remove))
+
 export default router

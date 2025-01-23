@@ -47,5 +47,19 @@ export default {
     })
 
     httpOk(res)
+  },
+
+  remove: async (req: Request, res: Response) => {
+    const id = Number(req.params.id)
+    await PrismaHelper.perm.update({
+      where: {
+        id,
+        delFlag: 0
+      },
+      data: {
+        delFlag: 1
+      }
+    })
+    httpOk(res)
   }
 }
