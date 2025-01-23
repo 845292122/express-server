@@ -54,10 +54,9 @@ model Perm {
   accountId Int?     @db.UnsignedInt
   account   Account? @relation(fields: [accountId], references: [id])
   key       String?  @db.VarChar(255)
+  name      String?  @db.VarChar(255)
   status    Int?     @default(1)
   delFlag   Int      @default(0) @db.TinyInt
-  createBy  String?
-  updateBy  String?
   createdAt DateTime @default(dbgenerated("NOW()")) @db.Timestamp
   updatedAt DateTime @default(dbgenerated("NOW() ON UPDATE NOW()")) @db.Timestamp
 
