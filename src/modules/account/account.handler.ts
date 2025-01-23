@@ -1,15 +1,14 @@
 import { Request, Response } from 'express'
 import { httpOk } from '../../app'
-import { AccountType } from './account'
 import { convertPageParam, PrismaHelper } from '../../helper/prisma.helper'
 import { BizError } from '../../common/error'
 import bcrypt from 'bcryptjs'
 import { Constant } from '../../common/constant'
-import { PageAccountType } from './account.schema'
+import { InputAccountType, PageAccountType } from './account.schema'
 
 export default {
   create: async (req: Request, res: Response) => {
-    const accountInfo: AccountType = req.body
+    const accountInfo: InputAccountType = req.body
 
     const accountExist = await PrismaHelper.account.findFirst({
       where: {
@@ -29,7 +28,7 @@ export default {
   },
 
   modify: async (req: Request, res: Response) => {
-    const accountInfo: AccountType = req.body
+    const accountInfo: InputAccountType = req.body
 
     const accountExist = await PrismaHelper.account.findFirst({
       where: {
