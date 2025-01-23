@@ -92,5 +92,30 @@ export default {
       total,
       records
     })
+  },
+
+  info: async (req: Request, res: Response) => {
+    const id = Number(req.params.id)
+    const accountInfo = await PrismaHelper.account.findUnique({
+      where: {
+        id
+      },
+      select: {
+        id: true,
+        contact: true,
+        phone: true,
+        company: true,
+        licenseNumber: true,
+        address: true,
+        remark: true,
+        isAdmin: true,
+        trialStartDate: true,
+        trialEndDate: true,
+        startDate: true,
+        endDate: true,
+        status: true
+      }
+    })
+    httpOk(res, accountInfo)
   }
 }

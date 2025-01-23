@@ -14,5 +14,7 @@ router.post('/modify', rateLimiter(), validate(inputAccountSchema), replyHelper(
 router.post('/remove/:id', rateLimiter(), replyHelper(accountHandler.remove))
 // * 获取分页账户列表
 router.get('/page', rateLimiter(), validate(pageAccountSchema), replyHelper(accountHandler.page))
+// * 获取账户详情
+router.get('/info/:id', rateLimiter(), replyHelper(accountHandler.info))
 
 export default router
