@@ -10,4 +10,13 @@ export const inputPermSchema = z.object({
   })
 })
 
+export const pagePermSchema = z.object({
+  query: z.object({
+    pageNo: z.coerce.number().default(1),
+    pageSize: z.coerce.number().default(10),
+    name: z.coerce.string().optional()
+  })
+})
+
 export type InputPermType = z.infer<typeof inputPermSchema>['body']
+export type PagePermType = z.infer<typeof pagePermSchema>['query']

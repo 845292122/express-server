@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import { httpOk } from '../../app'
-import { InputPermType } from './perm.schema'
-import { PrismaHelper } from '../../helper/prisma.helper'
+import { InputPermType, PagePermType } from './perm.schema'
+import { convertPageParam, PrismaHelper } from '../../helper/prisma.helper'
 import { BizError } from '../../common/error'
 
 export default {
@@ -61,5 +61,39 @@ export default {
       }
     })
     httpOk(res)
+  },
+
+  page: async (req: Request, res: Response) => {
+    const { pageNo, pageSize, name } = req.query as unknown as PagePermType
+    const pageParam = convertPageParam(pageNo, pageSize)
+    const condition = {
+      delFlag: 0,
+      name: name ?? undefined
+    }
+
+    const [total, records] = await Promise.all([
+      PrismaHelper.perm.count({
+        where: condition
+      }),
+      PrismaHelper.perm.findMany({
+        where: condition,
+        ...pageParam
+      })
+    ])
+
+    httpOk(res, {
+      total,
+      records
+    })
+  },
+
+  info: async (req: Request, res: Response) => {
+    const id = Number(req.params.id)
+    const permInfo = await PrismaHelper.perm.findUnique({
+      where: {
+        id
+      }
+    })
+    httpOk(res, permInfo)
   }
 }
