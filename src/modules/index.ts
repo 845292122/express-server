@@ -7,7 +7,7 @@ import { jwtAuth } from '../middleware'
 const router = Router()
 
 router.use('/auth', authRouter)
-router.use('/account', accountRouter)
+router.use('/account', jwtAuth, accountRouter)
 router.use('/perm', jwtAuth, permRouter)
 
 export default router
