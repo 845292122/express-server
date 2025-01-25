@@ -24,7 +24,7 @@ const app = express()
 // * 返回结果封装
 export const httpOk = <T>(res: express.Response, data?: T) => {
   return res.status(200).json({
-    code: 200,
+    msg: 'ok',
     data
   })
 }

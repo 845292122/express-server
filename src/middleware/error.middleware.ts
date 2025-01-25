@@ -3,10 +3,11 @@ import { BizError, NotFoundError } from '../common/error'
 import logger from '../helper/logger.helper'
 export const errorHandler = (err: Error, req: Request, res: Response, next: NextFunction) => {
   if (err instanceof BizError || err instanceof NotFoundError) {
-    res.status(err.code).json({ message: err.message })
+    res.status(err.code).json({ msg: err.message })
+    logger.error(err.stack)
     return
   }
 
   logger.error(err.stack)
-  res.status(500).json({ message: 'Internal Server Error' })
+  res.status(500).json({ msg: 'Internal Server Error' })
 }
