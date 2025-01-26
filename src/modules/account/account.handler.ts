@@ -80,6 +80,21 @@ export default {
       }),
       PrismaHelper.account.findMany({
         where: condition,
+        select: {
+          id: true,
+          contact: true,
+          phone: true,
+          company: true,
+          licenseNumber: true,
+          address: true,
+          remark: true,
+          isAdmin: true,
+          trialStartDate: true,
+          trialEndDate: true,
+          startDate: true,
+          endDate: true,
+          status: true
+        },
         ...pageParam
       })
     ])
