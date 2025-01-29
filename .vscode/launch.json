@@ -4,7 +4,7 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Airy Debug",
+      "name": "express debug",
       "runtimeExecutable": "nodemon",
       "runtimeArgs": ["-r", "ts-node/register"],
       "args": ["${workspaceFolder}/src/app.ts"],
