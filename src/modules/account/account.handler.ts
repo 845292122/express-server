@@ -67,8 +67,8 @@ export default {
   },
 
   page: async (req: Request, res: Response) => {
-    const { page, pageSize, company } = req.query as unknown as PageAccountType
-    const pageParam = convertPageParam(page, pageSize)
+    const { pageNo, pageSize, company } = req.query as unknown as PageAccountType
+    const pageParam = convertPageParam(pageNo, pageSize)
     const condition = {
       delFlag: 0,
       company: company ?? undefined
