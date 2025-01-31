@@ -67,11 +67,13 @@ export default {
   },
 
   page: async (req: Request, res: Response) => {
-    const { pageNo, pageSize, company } = req.query as unknown as PageAccountType
+    const { pageNo, pageSize, company, contact, status } = req.query as unknown as PageAccountType
     const pageParam = convertPageParam(pageNo, pageSize)
     const condition = {
       delFlag: 0,
-      company: company ?? undefined
+      company: company ? { startsWith: company } : undefined,
+      contact: contact ? { startsWith: contact } : undefined,
+      status: status ?? undefined
     }
 
     const [total, records] = await Promise.all([
@@ -87,6 +89,7 @@ export default {
           company: true,
           licenseNumber: true,
           address: true,
+          bizType: true,
           remark: true,
           isAdmin: true,
           trialStartDate: true,
@@ -118,6 +121,7 @@ export default {
         company: true,
         licenseNumber: true,
         address: true,
+        bizType: true,
         remark: true,
         isAdmin: true,
         trialStartDate: true,
