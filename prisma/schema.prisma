@@ -5,6 +5,8 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 // 常用命令
+// rm -rf prisma/migrations 删除旧的迁移文件
+// npx prisma migrate reset 重新迁移
 // npx prisma init 初始化prisma
 // npx prisma format 格式化schema
 // npx prisma migrate dev --name init 初始化数据库
@@ -39,7 +41,7 @@ model Tenant {
   createdAt       DateTime  @default(dbgenerated("NOW()")) @db.Timestamp
   updatedAt       DateTime  @default(dbgenerated("NOW() ON UPDATE NOW()")) @db.Timestamp
   Users           User[]
-  Perms           Perm[]
+  Perms           Perm[]    @relation("TenantPerms")
 
   @@index([contact, company, delFlag])
   @@map("tenant")
@@ -58,13 +60,13 @@ model User {
   isTenantAdmin Int?     @default(0) @db.TinyInt
   status        Int?     @default(0) @db.TinyInt
   remark        String?  @db.Text
-  wx_id         String?  @db.VarChar(100)
+  wxId          String?  @db.VarChar(100)
   delFlag       Int      @default(0) @db.TinyInt
   createdAt     DateTime @default(dbgenerated("NOW()")) @db.Timestamp
   updatedAt     DateTime @default(dbgenerated("NOW() ON UPDATE NOW()")) @db.Timestamp
-  Perms         Perm[]
+  Perms         Perm[]   @relation("UserPerms")
 
-  @@index([tenantId, username, contact, status, wx_id, delFlag])
+  @@index([tenantId, username, contact, status, wxId, delFlag])
   @@map("user")
 }
 
@@ -78,8 +80,8 @@ model Perm {
   delFlag   Int      @default(0) @db.TinyInt
   createdAt DateTime @default(dbgenerated("NOW()")) @db.Timestamp
   updatedAt DateTime @default(dbgenerated("NOW() ON UPDATE NOW()")) @db.Timestamp
-  users     User[]
-  tenants   Tenant[]
+  users     User[]   @relation("UserPerms")
+  tenants   Tenant[] @relation("TenantPerms")
 
   @@index([pId, name, delFlag])
   @@map("perm")
