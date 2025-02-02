@@ -4,7 +4,10 @@ export const tenantInputSchema = z.object({
   body: z.object({
     id: z.coerce.number().optional(),
     contact: z.coerce.string().trim().min(1, { message: '租户联系人不能为空' }),
-    phone: z.coerce.string().trim().min(1, { message: '租户联系电话不能为空' }),
+    phone: z.coerce
+      .string()
+      .trim()
+      .regex(/^1[3-9]\d{9}$/, { message: '请输入正确的手机号' }),
     company: z.coerce.string().trim().min(1, { message: '租户公司名称不能为空' }),
     address: z.coerce.string().nullish(),
     type: z.coerce.number().optional().default(0),
