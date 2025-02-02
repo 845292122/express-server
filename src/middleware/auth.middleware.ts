@@ -9,17 +9,22 @@ import { Request } from 'express'
 
 // * 本地策略 (登录时用)
 passport.use(
-  new LocalStrategy({ usernameField: 'phone', passwordField: 'password' }, async (phone, password, done) => {
+  new LocalStrategy({ usernameField: 'username', passwordField: 'password' }, async (username, password, done) => {
     try {
-      const account = await PrismaHelper.account.findFirst({
-        where: { phone }
+      const user = await PrismaHelper.user.findFirst({
+        where: {
+          delFlag: 0,
+          username
+        }
       })
 
-      if (!account || !bcrypt.compareSync(password, account.password ?? '')) {
-        return done(new BizError('无效的手机号或密码'))
+      if (!user || !bcrypt.compareSync(password, user.password ?? '')) {
+        return done(new BizError('无效的用户名或密码'))
       }
 
-      return done(null, account)
+      // TODO 用户状态判断
+
+      return done(null, user)
     } catch (err) {
       return done(err)
     }
@@ -36,15 +41,17 @@ passport.use(
     },
     async (req: Request, payload, done) => {
       try {
-        const account = await PrismaHelper.account.findUnique({ where: { id: payload.id } })
-        if (!account) {
+        const user = await PrismaHelper.user.findUnique({ where: { delFlag: 0, id: payload.id } })
+        if (!user) {
           return done(new BizError('无效的JWT～'))
         }
+        // TODO 用户状态判断
+
         const ip = payload.ip
         if (ip !== req.ip) {
           return done(new BizError('无效的JWT～~'))
         }
-        return done(null, account)
+        return done(null, user)
       } catch (err) {
         return done(err, false)
       }
