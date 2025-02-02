@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-export const inputTenantSchema = z.object({
+export const tenantInputSchema = z.object({
   body: z.object({
     id: z.coerce.number().optional(),
     contact: z.coerce.string().trim().min(1, { message: '租户联系人不能为空' }),
@@ -18,7 +18,7 @@ export const inputTenantSchema = z.object({
   })
 })
 
-export const pageTenantSchema = z.object({
+export const tenantPageSchema = z.object({
   query: z.object({
     pageNo: z.coerce.number().default(1),
     pageSize: z.coerce.number().default(10),
@@ -29,5 +29,5 @@ export const pageTenantSchema = z.object({
   })
 })
 
-export type InputTenantType = z.infer<typeof inputTenantSchema>['body']
-export type PageTenantType = z.infer<typeof pageTenantSchema>['query']
+export type TenantInputType = z.infer<typeof tenantInputSchema>['body']
+export type TenantPageType = z.infer<typeof tenantPageSchema>['query']
