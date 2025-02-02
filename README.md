@@ -1,6 +1,20 @@
 # airy-server
 
-基于 express+prisma+mysql 的 nodejs 后端服务
+基于 express+prisma+mysql 的 nodejs 后端saas权限服务
+
+## 权限业务
+
+### 表结构
+
+- 租户表
+- 用户表
+- 权限表
+
+## 业务逻辑
+
+1. 用户表tenant_id为空代表平台管理员(确保tenant_id有默认值，防止创建多余平台管理员账号)
+2. 平台管理员来创建租户管理员账号并分配权限
+3. 租户管理员来创建用户账号并分配权限(只能分配当前租户的权限)
 
 ## TODO
 

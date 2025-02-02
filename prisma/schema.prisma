@@ -19,56 +19,77 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// * 账户表
-// type: 业务类型
-model Account {
-  id             Int       @id @default(autoincrement()) @db.UnsignedInt
-  contact        String?   @db.VarChar(30)
-  phone          String?   @db.VarChar(20)
-  password       String?   @db.VarChar(255)
-  company        String?   @db.VarChar(50)
-  licenseNumber  String?   @db.VarChar(50)
-  address        String?   @db.VarChar(255)
-  bizType        Int?      @default(1)
-  remark         String?   @db.Text
-  isAdmin        Int?      @default(1) @db.TinyInt
-  trialStartDate DateTime? @default(dbgenerated("NOW()")) @db.DateTime
-  trialEndDate   DateTime? @default(dbgenerated("NOW()")) @db.DateTime
-  startDate      DateTime? @db.DateTime
-  endDate        DateTime? @db.DateTime
-  status         Int?      @default(1)
-  delFlag        Int       @default(0) @db.TinyInt
-  createdAt      DateTime  @default(dbgenerated("NOW()")) @db.Timestamp
-  updatedAt      DateTime  @default(dbgenerated("NOW() ON UPDATE NOW()")) @db.Timestamp
-  Perm           Perm[]
-  OperLog        OperLog[]
+// * 租户表
+model Tenant {
+  id              Int       @id @default(autoincrement()) @db.UnsignedInt
+  contact         String?   @db.VarChar(30)
+  phone           String?   @db.VarChar(20)
+  company         String?   @db.VarChar(50)
+  licenseNumber   String?   @db.VarChar(50)
+  address         String?   @db.VarChar(255)
+  type            Int?      @default(0) @db.TinyInt
+  remark          String?   @db.Text
+  isPlatformAdmin Int?      @default(0) @db.TinyInt
+  trialStartDate  DateTime? @db.DateTime
+  trialEndDate    DateTime? @db.DateTime
+  startDate       DateTime? @db.DateTime
+  endDate         DateTime? @db.DateTime
+  status          Int?      @default(0) @db.TinyInt
+  delFlag         Int       @default(0) @db.TinyInt
+  createdAt       DateTime  @default(dbgenerated("NOW()")) @db.Timestamp
+  updatedAt       DateTime  @default(dbgenerated("NOW() ON UPDATE NOW()")) @db.Timestamp
+  Users           User[]
+  Perms           Perm[]
 
   @@index([contact, company, delFlag])
-  @@map("account")
+  @@map("tenant")
+}
+
+// * 用户表
+model User {
+  id            Int      @id @default(autoincrement()) @db.UnsignedInt
+  tenantId      Int      @db.UnsignedInt
+  tenant        Tenant   @relation(fields: [tenantId], references: [id])
+  username      String?  @db.VarChar(255)
+  password      String?  @db.VarChar(255)
+  contact       String?  @db.VarChar(50)
+  position      String?  @db.VarChar(100)
+  phone         String?  @db.VarChar(20)
+  isTenantAdmin Int?     @default(0) @db.TinyInt
+  status        Int?     @default(0) @db.TinyInt
+  remark        String?  @db.Text
+  wx_id         String?  @db.VarChar(100)
+  delFlag       Int      @default(0) @db.TinyInt
+  createdAt     DateTime @default(dbgenerated("NOW()")) @db.Timestamp
+  updatedAt     DateTime @default(dbgenerated("NOW() ON UPDATE NOW()")) @db.Timestamp
+  Perms         Perm[]
+
+  @@index([tenantId, username, contact, status, wx_id, delFlag])
+  @@map("user")
 }
 
 // * 权限表
 model Perm {
   id        Int      @id @default(autoincrement()) @db.UnsignedInt
   pId       Int?     @db.UnsignedInt
-  accountId Int?     @db.UnsignedInt
-  account   Account? @relation(fields: [accountId], references: [id])
   key       String?  @db.VarChar(255)
   name      String?  @db.VarChar(255)
-  status    Int?     @default(1)
+  status    Int?     @default(1) @db.TinyInt
   delFlag   Int      @default(0) @db.TinyInt
   createdAt DateTime @default(dbgenerated("NOW()")) @db.Timestamp
   updatedAt DateTime @default(dbgenerated("NOW() ON UPDATE NOW()")) @db.Timestamp
+  users     User[]
+  tenants   Tenant[]
 
-  @@index([pId, accountId, key])
+  @@index([pId, name, delFlag])
   @@map("perm")
 }
 
 // * 操作日志
 model OperLog {
   id         BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
-  accountId  Int?     @db.UnsignedInt
-  account    Account? @relation(fields: [accountId], references: [id])
+  tenantId   Int?     @db.UnsignedInt
+  userId     Int?     @db.UnsignedInt
   type       Int?     @default(0)
   method     String?
   operName   String?
@@ -79,6 +100,6 @@ model OperLog {
   operTime   DateTime @default(dbgenerated("NOW()")) @db.Timestamp
   costTime   BigInt   @db.UnsignedBigInt
 
-  @@index([accountId, type, operName])
+  @@index([tenantId, userId, type, operName])
   @@map("log")
 }
