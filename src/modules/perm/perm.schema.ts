@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-export const inputPermSchema = z.object({
+export const permInputSchema = z.object({
   body: z.object({
     id: z.coerce.number().optional(),
     pId: z.coerce.number().optional().default(0),
@@ -10,13 +10,12 @@ export const inputPermSchema = z.object({
   })
 })
 
-export const pagePermSchema = z.object({
+export const permListSchema = z.object({
   query: z.object({
-    pageNo: z.coerce.number().default(1),
-    pageSize: z.coerce.number().default(10),
-    name: z.coerce.string().optional()
+    name: z.coerce.string().nullish(),
+    status: z.coerce.number().nullish()
   })
 })
 
-export type InputPermType = z.infer<typeof inputPermSchema>['body']
-export type PagePermType = z.infer<typeof pagePermSchema>['query']
+export type PermInputType = z.infer<typeof permInputSchema>['body']
+export type PermListType = z.infer<typeof permListSchema>['query']
