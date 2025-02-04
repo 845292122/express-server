@@ -11,10 +11,10 @@ router.post('/create', rateLimiter(), validate(permInputSchema), replyHelper(Per
 // * 修改权限
 router.post('/modify', rateLimiter(), validate(permInputSchema), replyHelper(PermHandler.modify))
 // * 删除权限
-router.post('/remove', rateLimiter(), replyHelper(PermHandler.remove))
+router.post('/remove/:id', rateLimiter(), replyHelper(PermHandler.remove))
 // * 获取权限列表
 router.get('/list', rateLimiter(), validate(permListSchema), replyHelper(PermHandler.list))
 // * 获取权限详情
-router.get('/info', rateLimiter(), replyHelper(PermHandler.info))
+router.get('/info/:id', rateLimiter(), replyHelper(PermHandler.info))
 
 export default router
