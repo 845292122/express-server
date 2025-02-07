@@ -70,22 +70,33 @@ model User {
   @@map("user")
 }
 
-// * 权限表
+// * 权限关系表
+// TODO 路由权限规则前端维护,后端只需要记录用户/租户 => 权限的映射关系
 model Perm {
-  id        Int      @id @default(autoincrement()) @db.UnsignedInt
-  pId       Int?     @db.UnsignedInt
-  key       String?  @db.VarChar(255)
-  name      String?  @db.VarChar(255)
-  status    Int?     @default(1) @db.TinyInt
-  delFlag   Int      @default(0) @db.TinyInt
-  createdAt DateTime @default(dbgenerated("NOW()")) @db.Timestamp
-  updatedAt DateTime @default(dbgenerated("NOW() ON UPDATE NOW()")) @db.Timestamp
-  users     User[]   @relation("UserPerms")
-  tenants   Tenant[] @relation("TenantPerms")
-
-  @@index([pId, name, delFlag])
-  @@map("perm")
+  id        Int     @id @default(autoincrement()) @db.UnsignedInt
+  ownerId   Int     @db.UnsignedInt
+  ownerType Int     @db.TinyInt
+  perm      String
+  tenant    Tenant? @relation("TenantPerms", fields: [ownerId], references: [id], map: "Tenant_Perms_FK")
+  user      User?   @relation("UserPerms", fields: [ownerId], references: [id], map: "User_Perms_FK")
 }
+
+// model Perm {
+//   id        Int      @id @default(autoincrement()) @db.UnsignedInt
+//   key       String?  @db.VarChar(255)
+//   name      String?  @db.VarChar(255)
+//   module    String?  @db.VarChar(255)
+//   type      Int?     @default(1) @db.TinyInt
+//   status    Int?     @default(1) @db.TinyInt
+//   delFlag   Int      @default(0) @db.TinyInt
+//   createdAt DateTime @default(dbgenerated("NOW()")) @db.Timestamp
+//   updatedAt DateTime @default(dbgenerated("NOW() ON UPDATE NOW()")) @db.Timestamp
+//   users     User[]   @relation("UserPerms")
+//   tenants   Tenant[] @relation("TenantPerms")
+
+//   @@index([name, delFlag])
+//   @@map("perm")
+// }
 
 // * 操作日志
 model OperLog {
