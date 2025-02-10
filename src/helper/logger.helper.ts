@@ -18,7 +18,7 @@ const logger = pino({
       {
         target: 'pino-rotating-file-stream',
         options: {
-          filename: 'app-%DATE%.log',
+          filename: `app-${new Date().toISOString().split('T')[0]}.log`,
           path: logDir,
           interval: '1d',
           maxFiles: 7,
