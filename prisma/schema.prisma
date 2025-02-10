@@ -23,84 +23,122 @@ datasource db {
 
 // * 租户表
 model Tenant {
-  id              Int       @id @default(autoincrement()) @db.UnsignedInt
-  contact         String?   @db.VarChar(30)
-  phone           String?   @db.VarChar(20)
-  company         String?   @db.VarChar(50)
-  licenseNumber   String?   @db.VarChar(50)
-  address         String?   @db.VarChar(255)
-  type            Int?      @default(0) @db.TinyInt
-  remark          String?   @db.Text
-  isPlatformAdmin Int?      @default(0) @db.TinyInt
-  trialStartDate  DateTime? @db.DateTime
-  trialEndDate    DateTime? @db.DateTime
-  startDate       DateTime? @db.DateTime
-  endDate         DateTime? @db.DateTime
-  status          Int?      @default(0) @db.TinyInt
-  delFlag         Int       @default(0) @db.TinyInt
-  createdAt       DateTime  @default(dbgenerated("NOW()")) @db.Timestamp
-  updatedAt       DateTime  @default(dbgenerated("NOW() ON UPDATE NOW()")) @db.Timestamp
-  Users           User[]
-  Perms           Perm[]    @relation("TenantPerms")
+  /// 主键
+  id             Int       @id @default(autoincrement()) @db.UnsignedInt
+  /// 联系人
+  contactName    String?   @db.VarChar(30)
+  /// 联系电话
+  contactPhone   String?   @db.VarChar(20)
+  /// 公司名称
+  companyName    String?   @db.VarChar(50)
+  /// 统一社会信用代码
+  licenseNumber  String?   @db.VarChar(50)
+  /// 地址
+  address        String?   @db.VarChar(255)
+  /// 域名
+  domain         String?   @db.VarChar(255)
+  /// 备注
+  remark         String?   @db.VarChar(255)
+  /// 用户数量,最大127,-1为无限制
+  userCount      Int?      @db.TinyInt
+  /// 试用开始时间
+  trialStartDate DateTime? @db.DateTime
+  /// 试用结束时间
+  trialEndDate   DateTime? @db.DateTime
+  /// 开始时间
+  startDate      DateTime? @db.DateTime
+  /// 结束时间
+  endDate        DateTime? @db.DateTime
+  /// 状态 未使用; 试用中; 试用结束; 试用中; 到期;
+  status         Int?      @default(0) @db.TinyInt
+  /// 是否是VIP
+  isPremium      Int?      @default(0) @db.TinyInt()
+  /// 逻辑删除 1代表删除
+  delFlag        Int       @default(0) @db.TinyInt
+  /// 创建时间
+  createdAt      DateTime  @default(dbgenerated("NOW()")) @db.Timestamp
+  /// 最后更新时间
+  updatedAt      DateTime  @default(dbgenerated("NOW() ON UPDATE NOW()")) @db.Timestamp
+  /// 创建人
+  createdBy      Int?      @db.UnsignedInt
+  /// 更新人
+  updatedBy      Int?      @db.UnsignedInt
+  User           User[]
+  Perm           Perm[]
 
-  @@index([contact, company, delFlag])
+  @@index([contactName, companyName, delFlag])
   @@map("tenant")
 }
 
-// * 用户表
+// * 用户表 (租户 -> 用户 = 1对多)
 model User {
-  id            Int      @id @default(autoincrement()) @db.UnsignedInt
-  tenantId      Int      @db.UnsignedInt
-  tenant        Tenant   @relation(fields: [tenantId], references: [id])
-  username      String?  @db.VarChar(255)
-  password      String?  @db.VarChar(255)
-  contact       String?  @db.VarChar(50)
-  position      String?  @db.VarChar(100)
-  phone         String?  @db.VarChar(20)
-  isTenantAdmin Int?     @default(0) @db.TinyInt
-  status        Int?     @default(0) @db.TinyInt
-  remark        String?  @db.Text
-  wxId          String?  @db.VarChar(100)
-  delFlag       Int      @default(0) @db.TinyInt
-  createdAt     DateTime @default(dbgenerated("NOW()")) @db.Timestamp
-  updatedAt     DateTime @default(dbgenerated("NOW() ON UPDATE NOW()")) @db.Timestamp
-  Perms         Perm[]   @relation("UserPerms")
+  /// 主键
+  id              Int      @id @default(autoincrement()) @db.UnsignedInt
+  /// 用户名
+  username        String?  @db.VarChar(50)
+  /// 密码
+  password        String?  @db.VarChar(255)
+  /// 昵称
+  nickname        String?  @db.VarChar(100)
+  /// 是否平台管理员, 1: 是; 0: 否
+  isPlatformAdmin Int?     @default(0) @db.TinyInt
+  /// 是否主账号 1: 是; 0: 否
+  isMaster        Int?     @default(0) @db.TinyInt
+  /// 数据权限 1: 全部数据权限 2: 本人数据权限 3: 自定义数据权限
+  dataScope       Int?     @db.TinyInt
+  /// 邮箱
+  email           String?  @db.VarChar(50)
+  /// 手机号
+  phone           String?  @db.VarChar(20)
+  /// 头像
+  avatar          String?  @db.VarChar(255)
+  /// 状态 1: 正常; 2: 禁用
+  status          Int?     @default(1) @db.TinyInt
+  /// 最后登录IP
+  loginIP         String?  @db.VarChar(255)
+  /// 最后登录日期
+  loginDate       DateTime @db.Timestamp()
+  /// 备注
+  remark          String?  @db.VarChar(500)
+  /// 逻辑删除
+  delFlag         Int      @default(0) @db.TinyInt
+  /// 创建时间
+  createdAt       DateTime @default(dbgenerated("NOW()")) @db.Timestamp
+  /// 最后更新时间
+  updatedAt       DateTime @default(dbgenerated("NOW() ON UPDATE NOW()")) @db.Timestamp
+  /// 租户关联ID
+  tenantID        Int      @db.UnsignedInt
+  tenant          Tenant   @relation(fields: [tenantID], references: [id])
+  Perm            Perm[]
 
-  @@index([tenantId, username, contact, status, wxId, delFlag])
+  @@index([username, nickname, isPlatformAdmin, isMaster, status])
   @@map("user")
 }
 
-// * 权限关系表
-// TODO 路由权限规则前端维护,后端只需要记录用户/租户 => 权限的映射关系
+// * 权限表 (1个租户有多个权限,1个用户也有多个权限)
 model Perm {
-  id        Int     @id @default(autoincrement()) @db.UnsignedInt
-  ownerId   Int     @db.UnsignedInt
-  ownerType Int     @db.TinyInt
-  perm      String
-  tenant    Tenant? @relation("TenantPerms", fields: [ownerId], references: [id], map: "Tenant_Perms_FK")
-  user      User?   @relation("UserPerms", fields: [ownerId], references: [id], map: "User_Perms_FK")
+  /// 主键
+  id        Int      @id @default(autoincrement()) @db.UnsignedInt
+  /// 租户或用户的 ID
+  ownerId   Int?     @db.UnsignedInt
+  /// 权限类型 1: 租户 2: 用户
+  ownerType Int?     @db.TinyInt
+  /// 权限
+  perm      String?  @db.VarChar(100)
+  /// 创建时间
+  createdAt DateTime @default(dbgenerated("NOW()")) @db.Timestamp
+  /// 最后更新时间
+  updatedAt DateTime @default(dbgenerated("NOW() ON UPDATE NOW()")) @db.Timestamp
+  tenant    Tenant?  @relation(fields: [ownerId], references: [id], map: "Tenant_Permissions_FK")
+  user      User?    @relation(fields: [ownerId], references: [id], map: "User_Permissions_FK")
+
+  @@index([ownerId, ownerType])
+  @@map("perm")
 }
-
-// model Perm {
-//   id        Int      @id @default(autoincrement()) @db.UnsignedInt
-//   key       String?  @db.VarChar(255)
-//   name      String?  @db.VarChar(255)
-//   module    String?  @db.VarChar(255)
-//   type      Int?     @default(1) @db.TinyInt
-//   status    Int?     @default(1) @db.TinyInt
-//   delFlag   Int      @default(0) @db.TinyInt
-//   createdAt DateTime @default(dbgenerated("NOW()")) @db.Timestamp
-//   updatedAt DateTime @default(dbgenerated("NOW() ON UPDATE NOW()")) @db.Timestamp
-//   users     User[]   @relation("UserPerms")
-//   tenants   Tenant[] @relation("TenantPerms")
-
-//   @@index([name, delFlag])
-//   @@map("perm")
-// }
 
 // * 操作日志
 model OperLog {
-  id         BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
+  id         Int      @id @default(autoincrement())
   tenantId   Int?     @db.UnsignedInt
   userId     Int?     @db.UnsignedInt
   type       Int?     @default(0)
