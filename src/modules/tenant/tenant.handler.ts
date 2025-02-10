@@ -10,7 +10,7 @@ const create = async (req: Request, res: Response) => {
 
   const tenantExist = await PrismaHelper.tenant.findFirst({
     where: {
-      phone: tenantInfo.phone,
+      contactPhone: tenantInfo.contactPhone,
       delFlag: 0
     }
   })
@@ -30,7 +30,7 @@ const modify = async (req: Request, res: Response) => {
 
   const tenantExist = await PrismaHelper.tenant.findFirst({
     where: {
-      phone: tenantInfo.phone,
+      contactPhone: tenantInfo.contactPhone,
       delFlag: 0,
       id: {
         not: tenantInfo.id
@@ -67,14 +67,13 @@ const remove = async (req: Request, res: Response) => {
 
 // 分页查询
 const page = async (req: Request, res: Response) => {
-  const { pageNo, pageSize, company, contact, status, type } = req.query as unknown as TenantPageType
+  const { pageNo, pageSize, companyName, contactName, status } = req.query as unknown as TenantPageType
   const pageParam = convertPageParam(pageNo, pageSize)
   const condition = {
     delFlag: 0,
-    company: company ? { startsWith: company } : undefined,
-    contact: contact ? { startsWith: contact } : undefined,
-    status: status ?? undefined,
-    type: type ?? undefined
+    company: companyName ? { startsWith: companyName } : undefined,
+    contact: contactName ? { startsWith: contactName } : undefined,
+    status: status ?? undefined
   }
 
   const [total, records] = await Promise.all([
@@ -85,14 +84,13 @@ const page = async (req: Request, res: Response) => {
       where: condition,
       select: {
         id: true,
-        contact: true,
-        phone: true,
-        company: true,
+        contactName: true,
+        contactPhone: true,
+        companyName: true,
         licenseNumber: true,
         address: true,
-        type: true,
         remark: true,
-        isPlatformAdmin: true,
+        isPremium: true,
         trialStartDate: true,
         trialEndDate: true,
         startDate: true,
@@ -118,14 +116,13 @@ const info = async (req: Request, res: Response) => {
     },
     select: {
       id: true,
-      contact: true,
-      phone: true,
-      company: true,
+      contactName: true,
+      contactPhone: true,
+      companyName: true,
       licenseNumber: true,
       address: true,
-      type: true,
       remark: true,
-      isPlatformAdmin: true,
+      isPremium: true,
       trialStartDate: true,
       trialEndDate: true,
       startDate: true,

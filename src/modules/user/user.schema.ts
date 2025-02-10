@@ -3,7 +3,7 @@ import { z } from 'zod'
 export const userInputSchema = z.object({
   body: z.object({
     id: z.coerce.number().optional(),
-    tenantId: z.coerce.number().optional(),
+    tenantID: z.coerce.number(),
     username: z.coerce.string().trim().min(1, { message: '用户名不能为空' }),
     password: z.coerce.string().nullish(),
     nickname: z.coerce.string().nullish(),

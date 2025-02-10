@@ -21,7 +21,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// * 租户表
+/// 租户表
 model Tenant {
   /// 主键
   id             Int       @id @default(autoincrement()) @db.UnsignedInt
@@ -66,52 +66,52 @@ model Tenant {
   @@map("tenant")
 }
 
-// * 用户表 (租户 -> 用户 = 1对多)
+/// 用户表
 model User {
   /// 主键
-  id              Int      @id @default(autoincrement()) @db.UnsignedInt
+  id              Int       @id @default(autoincrement()) @db.UnsignedInt
   /// 用户名
-  username        String?  @db.VarChar(50)
+  username        String?   @db.VarChar(50)
   /// 密码
-  password        String?  @db.VarChar(255)
+  password        String?   @db.VarChar(255)
   /// 昵称
-  nickname        String?  @db.VarChar(100)
+  nickname        String?   @db.VarChar(100)
   /// 是否平台管理员, 1: 是; 0: 否
-  isPlatformAdmin Int?     @default(0) @db.TinyInt
+  isPlatformAdmin Int?      @default(0) @db.TinyInt
   /// 是否主账号 1: 是; 0: 否
-  isMaster        Int?     @default(0) @db.TinyInt
+  isMaster        Int?      @default(0) @db.TinyInt
   /// 数据权限 1: 全部数据权限 2: 本人数据权限 3: 自定义数据权限
-  dataScope       Int?     @db.TinyInt
+  dataScope       Int?      @db.TinyInt
   /// 邮箱
-  email           String?  @db.VarChar(50)
+  email           String?   @db.VarChar(50)
   /// 手机号
-  phone           String?  @db.VarChar(20)
+  phone           String?   @db.VarChar(20)
   /// 头像
-  avatar          String?  @db.VarChar(255)
+  avatar          String?   @db.VarChar(255)
   /// 状态 1: 正常; 2: 禁用
-  status          Int?     @default(1) @db.TinyInt
+  status          Int?      @default(1) @db.TinyInt
   /// 最后登录IP
-  loginIP         String?  @db.VarChar(255)
+  loginIP         String?   @db.VarChar(255)
   /// 最后登录日期
-  loginDate       DateTime @db.Timestamp()
+  loginDate       DateTime? @db.Timestamp()
   /// 备注
-  remark          String?  @db.VarChar(500)
+  remark          String?   @db.VarChar(500)
   /// 逻辑删除
-  delFlag         Int      @default(0) @db.TinyInt
+  delFlag         Int       @default(0) @db.TinyInt
   /// 创建时间
-  createdAt       DateTime @default(dbgenerated("NOW()")) @db.Timestamp
+  createdAt       DateTime  @default(dbgenerated("NOW()")) @db.Timestamp
   /// 最后更新时间
-  updatedAt       DateTime @default(dbgenerated("NOW() ON UPDATE NOW()")) @db.Timestamp
+  updatedAt       DateTime  @default(dbgenerated("NOW() ON UPDATE NOW()")) @db.Timestamp
   /// 租户关联ID
-  tenantID        Int      @db.UnsignedInt
-  tenant          Tenant   @relation(fields: [tenantID], references: [id])
+  tenantID        Int       @db.UnsignedInt
+  tenant          Tenant    @relation(fields: [tenantID], references: [id])
   Perm            Perm[]
 
   @@index([username, nickname, isPlatformAdmin, isMaster, status])
   @@map("user")
 }
 
-// * 权限表 (1个租户有多个权限,1个用户也有多个权限)
+/// 权限表
 model Perm {
   /// 主键
   id        Int      @id @default(autoincrement()) @db.UnsignedInt
@@ -132,21 +132,33 @@ model Perm {
   @@map("perm")
 }
 
-// * 操作日志
+/// 操作日志
 model OperLog {
+  /// 主键
   id         Int      @id @default(autoincrement())
-  tenantId   Int?     @db.UnsignedInt
-  userId     Int?     @db.UnsignedInt
+  /// 租户ID
+  tenantID   Int?     @db.UnsignedInt
+  /// 用户ID
+  userID     Int?     @db.UnsignedInt
+  /// 业务类型
   type       Int?     @default(0)
+  /// 执行方法
   method     String?
+  /// 操作人
   operName   String?
+  /// 操作参数
   operParam  String?  @db.Text
+  /// 操作结果
   operResult String?  @db.Text
+  /// 状态
   status     Int?     @db.TinyInt
+  /// 错误信息
   errorMsg   String?  @db.Text
+  /// 请求时间
   operTime   DateTime @default(dbgenerated("NOW()")) @db.Timestamp
+  /// 请求消耗时间
   costTime   BigInt   @db.UnsignedBigInt
 
-  @@index([tenantId, userId, type, operName])
+  @@index([tenantID, userID, type, operName])
   @@map("log")
 }

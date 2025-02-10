@@ -13,7 +13,7 @@ const create = async (req: Request, res: Response) => {
     where: {
       delFlag: 0,
       username: userInfo.username,
-      tenantId: userInfo.tenantId
+      tenantID: userInfo.tenantID
     }
   })
 
@@ -34,7 +34,7 @@ const modify = async (req: Request, res: Response) => {
     where: {
       delFlag: 0,
       username: userInfo.username,
-      tenantId: userInfo.tenantId,
+      tenantID: userInfo.tenantID,
       id: {
         not: userInfo.id
       }
@@ -69,12 +69,11 @@ const remove = async (req: Request, res: Response) => {
 }
 
 const page = async (req: Request, res: Response) => {
-  const { pageNo, pageSize, username, contact, status } = req.query as unknown as UserPageType
+  const { pageNo, pageSize, nickname, status } = req.query as unknown as UserPageType
   const pageParam = convertPageParam(pageNo, pageSize)
   const condition = {
     delFlag: 0,
-    username: username ? { startsWith: username } : undefined,
-    contact: contact ? { startsWith: contact } : undefined,
+    nickname: nickname ? { startsWith: nickname } : undefined,
     status: status ?? undefined
   }
 
@@ -85,8 +84,7 @@ const page = async (req: Request, res: Response) => {
       select: {
         id: true,
         username: true,
-        contact: true,
-        position: true,
+        nickname: true,
         phone: true,
         status: true,
         remark: true
@@ -111,8 +109,7 @@ const info = async (req: Request, res: Response) => {
     select: {
       id: true,
       username: true,
-      contact: true,
-      position: true,
+      nickname: true,
       phone: true,
       status: true,
       remark: true
