@@ -9,5 +9,5 @@ export const errorHandler = (err: Error, req: Request, res: Response, next: Next
   }
 
   logger.error(err.stack)
-  res.status(500).json({ msg: 'Internal Server Error' })
+  res.status(500).send('Internal Server Error')
 }
