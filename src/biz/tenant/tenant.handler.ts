@@ -71,8 +71,8 @@ const page = async (req: Request, res: Response) => {
   const pageParam = convertPageParam(pageNo, pageSize)
   const condition = {
     delFlag: 0,
-    company: companyName ? { startsWith: companyName } : undefined,
-    contact: contactName ? { startsWith: contactName } : undefined,
+    companyName: companyName ? { startsWith: companyName } : undefined,
+    contactName: contactName ? { startsWith: contactName } : undefined,
     status: status ?? undefined
   }
 
