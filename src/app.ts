@@ -8,7 +8,7 @@ import { corsOptions, morganLogger } from './config'
 import apiRouter from './biz'
 import { NotFoundError } from './common/error'
 import { errorHandler } from './middleware'
-import logger from './helper/logger.helper'
+import { loggerUtil } from './utils/logger.util'
 
 // * 捕获同步异常
 process.on('uncaughtException', error => {
@@ -67,7 +67,7 @@ app.use((req, res, next) => {
 app.use(errorHandler)
 
 app.listen(3000, () => {
-  logger.info(`express server is running`)
+  loggerUtil.info(`express server is running`)
 })
 
 export default app

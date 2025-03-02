@@ -1,5 +1,5 @@
 import morgan from 'morgan'
-import logger from '../helper/logger.helper'
+import { loggerUtil } from '../utils/logger.util'
 
 // 根据环境选择日志格式
 // const skip = () => {
@@ -15,9 +15,9 @@ export const morganLogger = morgan(
       write: message => {
         const status = parseInt(message.split(' ')[2], 10) // 从日志中提取状态码
         if (status >= 500) {
-          logger.error(`HTTP Error: ${message.trim()}`) // 错误级别日志
+          loggerUtil.error(`HTTP Error: ${message.trim()}`) // 错误级别日志
         } else {
-          logger.info(message.trim()) // 普通信息日志
+          loggerUtil.info(message.trim()) // 普通信息日志
         }
       }
     }

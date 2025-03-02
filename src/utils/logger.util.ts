@@ -7,7 +7,7 @@ if (!fs.existsSync(logDir)) {
   fs.mkdirSync(logDir, { recursive: true }) // 递归创建
 }
 
-const logger = pino({
+export const loggerUtil = pino({
   level: 'info',
   transport: {
     targets: [
@@ -28,5 +28,3 @@ const logger = pino({
     ]
   }
 })
-
-export default logger

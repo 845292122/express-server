@@ -1,6 +1,6 @@
 import passport from 'passport'
 import { Strategy as LocalStrategy } from 'passport-local'
-import { PrismaHelper } from '../helper/prisma.helper'
+import { PrismaUtil } from '../utils/prisma.util'
 import bcrypt from 'bcryptjs'
 import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt'
 import { Constant } from '../common/constant'
@@ -11,7 +11,7 @@ import { Request } from 'express'
 passport.use(
   new LocalStrategy({ usernameField: 'username', passwordField: 'password' }, async (username, password, done) => {
     try {
-      const user = await PrismaHelper.user.findFirst({
+      const user = await PrismaUtil.user.findFirst({
         where: {
           delFlag: 0,
           username
@@ -41,7 +41,7 @@ passport.use(
     },
     async (req: Request, payload, done) => {
       try {
-        const user = await PrismaHelper.user.findUnique({ where: { delFlag: 0, id: payload.id } })
+        const user = await PrismaUtil.user.findUnique({ where: { delFlag: 0, id: payload.id } })
         if (!user) {
           return done(new BizError('无效的JWT～'))
         }

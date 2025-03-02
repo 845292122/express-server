@@ -1,7 +1,7 @@
 import { Constant } from '../common/constant'
 import jwt from 'jsonwebtoken'
 
-export const jwtHelper = {
+export const JwtUtil = {
   generateToken: (user: any, ip: string) => {
     const payload = { id: user.id, phone: user.phone, ip }
     // 单位: s

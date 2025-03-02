@@ -1,6 +1,7 @@
 import { Request } from 'express'
 import { UserInputType, UserPageType } from './user.schema'
-import { convertPageParam, PrismaHelper } from '../../helper/prisma.helper'
+import { convertPageParam } from '../../utils/common.util'
+import { PrismaUtil } from '../../utils/prisma.util'
 import { BizError } from '../../common/error'
 import bcrypt from 'bcryptjs'
 import { Constant } from '../../common/constant'
@@ -8,7 +9,7 @@ import { Constant } from '../../common/constant'
 const create = async (req: Request) => {
   const userInfo: UserInputType = req.body
 
-  const userExist = await PrismaHelper.user.findFirst({
+  const userExist = await PrismaUtil.user.findFirst({
     where: {
       delFlag: 0,
       username: userInfo.username,
@@ -19,7 +20,7 @@ const create = async (req: Request) => {
   if (userExist) throw new BizError('用户名已存在')
 
   userInfo.password = bcrypt.hashSync(Constant.Auth.INIT_PWD)
-  await PrismaHelper.user.create({
+  await PrismaUtil.user.create({
     data: userInfo
   })
 
@@ -29,7 +30,7 @@ const create = async (req: Request) => {
 const modify = async (req: Request) => {
   const userInfo: UserInputType = req.body
 
-  const userExist = await PrismaHelper.user.findFirst({
+  const userExist = await PrismaUtil.user.findFirst({
     where: {
       delFlag: 0,
       username: userInfo.username,
@@ -42,7 +43,7 @@ const modify = async (req: Request) => {
 
   if (userExist) throw new BizError('用户名已存在')
 
-  await PrismaHelper.user.update({
+  await PrismaUtil.user.update({
     where: {
       id: userInfo.id
     },
@@ -55,7 +56,7 @@ const modify = async (req: Request) => {
 const remove = async (req: Request) => {
   const id = Number(req.params.id)
   // TODO 校验用户是否在当前租户下
-  await PrismaHelper.user.update({
+  await PrismaUtil.user.update({
     where: {
       delFlag: 0,
       id
@@ -77,8 +78,8 @@ const page = async (req: Request) => {
   }
 
   const [total, records] = await Promise.all([
-    PrismaHelper.user.count({ where: condition }),
-    PrismaHelper.user.findMany({
+    PrismaUtil.user.count({ where: condition }),
+    PrismaUtil.user.findMany({
       where: condition,
       select: {
         id: true,
@@ -100,7 +101,7 @@ const page = async (req: Request) => {
 
 const info = async (req: Request) => {
   const id = Number(req.params.id)
-  const userInfo = await PrismaHelper.user.findUnique({
+  const userInfo = await PrismaUtil.user.findUnique({
     where: {
       delFlag: 0,
       id

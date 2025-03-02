@@ -1,6 +1,6 @@
 import { Request, Router } from 'express'
 import passport from 'passport'
-import { jwtHelper } from '../../helper/jwt.helper'
+import { JwtUtil } from '../../utils/jwt.util'
 import { validate, reply } from '../../middleware'
 import { authLoginSchema } from './auth.schema'
 import { BizError } from '../../common/error'
@@ -15,7 +15,7 @@ router.post(
   passport.authenticate('local', { session: false }),
   reply(async (req: Request) => {
     if (!req.ip) throw new BizError('无效的IP')
-    const token = jwtHelper.generateToken(req.user, req.ip)
+    const token = JwtUtil.generateToken(req.user, req.ip)
     return token
   })
 )

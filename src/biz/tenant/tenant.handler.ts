@@ -1,13 +1,14 @@
-import { NextFunction, Request } from 'express'
+import { Request } from 'express'
 import { TenantInputType, TenantPageType } from './tenant.schema'
-import { convertPageParam, PrismaHelper } from '../../helper/prisma.helper'
+import { convertPageParam } from '../../utils/common.util'
+import { PrismaUtil } from '../../utils/prisma.util'
 import { BizError } from '../../common/error'
 
 // 创建租户
 const create = async (req: Request) => {
   const tenantInfo: TenantInputType = req.body
 
-  const tenantExist = await PrismaHelper.tenant.findFirst({
+  const tenantExist = await PrismaUtil.tenant.findFirst({
     where: {
       contactPhone: tenantInfo.contactPhone,
       delFlag: 0
@@ -16,7 +17,7 @@ const create = async (req: Request) => {
 
   if (tenantExist) throw new BizError('该手机号已经绑定租户')
 
-  await PrismaHelper.tenant.create({
+  await PrismaUtil.tenant.create({
     data: tenantInfo
   })
 
@@ -27,7 +28,7 @@ const create = async (req: Request) => {
 const modify = async (req: Request) => {
   const tenantInfo: TenantInputType = req.body
 
-  const tenantExist = await PrismaHelper.tenant.findFirst({
+  const tenantExist = await PrismaUtil.tenant.findFirst({
     where: {
       contactPhone: tenantInfo.contactPhone,
       delFlag: 0,
@@ -39,7 +40,7 @@ const modify = async (req: Request) => {
 
   if (tenantExist) throw new BizError('该手机号已经绑定租户')
 
-  await PrismaHelper.tenant.update({
+  await PrismaUtil.tenant.update({
     where: {
       id: tenantInfo.id
     },
@@ -51,7 +52,7 @@ const modify = async (req: Request) => {
 // 删除租户
 const remove = async (req: Request) => {
   const id = Number(req.params.id)
-  await PrismaHelper.tenant.update({
+  await PrismaUtil.tenant.update({
     where: {
       id,
       delFlag: 0
@@ -75,10 +76,10 @@ const page = async (req: Request) => {
   }
 
   const [total, records] = await Promise.all([
-    PrismaHelper.tenant.count({
+    PrismaUtil.tenant.count({
       where: condition
     }),
-    PrismaHelper.tenant.findMany({
+    PrismaUtil.tenant.findMany({
       where: condition,
       select: {
         id: true,
@@ -108,7 +109,7 @@ const page = async (req: Request) => {
 // 获取租户详情
 const info = async (req: Request) => {
   const id = Number(req.params.id)
-  const tenantInfo = await PrismaHelper.tenant.findUnique({
+  const tenantInfo = await PrismaUtil.tenant.findUnique({
     where: {
       id
     },
