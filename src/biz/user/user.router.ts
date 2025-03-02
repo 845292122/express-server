@@ -1,15 +1,14 @@
 import { Router } from 'express'
-import { rateLimiter, validate } from '../../middleware'
+import { rateLimiter, validate, reply } from '../../middleware'
 import { userInputSchema, userPageSchema } from './user.schema'
-import replyHelper from '../../helper/reply.helper'
 import userHandler from './user.handler'
 
 const router = Router()
 
-router.post('/create', rateLimiter(), validate(userInputSchema), replyHelper(userHandler.create))
-router.post('/modify', rateLimiter(), validate(userInputSchema), replyHelper(userHandler.modify))
-router.post('/remove/:id', rateLimiter(), replyHelper(userHandler.remove))
-router.get('/page', rateLimiter(), validate(userPageSchema), replyHelper(userHandler.page))
-router.get('/info/:id', rateLimiter(), replyHelper(userHandler.info))
+router.post('/create', rateLimiter(), validate(userInputSchema), reply(userHandler.create))
+router.post('/modify', rateLimiter(), validate(userInputSchema), reply(userHandler.modify))
+router.post('/remove/:id', rateLimiter(), reply(userHandler.remove))
+router.get('/page', rateLimiter(), validate(userPageSchema), reply(userHandler.page))
+router.get('/info/:id', rateLimiter(), reply(userHandler.info))
 
 export default router

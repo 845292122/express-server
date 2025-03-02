@@ -22,14 +22,6 @@ process.on('unhandledRejection', (reason, promise) => {
 
 const app = express()
 
-// * 返回结果封装
-export const httpOk = <T>(res: express.Response, data?: T) => {
-  return res.status(200).json({
-    msg: 'ok',
-    data
-  })
-}
-
 // 配置 Multer 存储引擎（这里使用内存存储）
 export const upload = multer({ storage: multer.memoryStorage() })
 

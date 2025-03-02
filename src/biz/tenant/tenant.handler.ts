@@ -1,11 +1,10 @@
-import { Request, Response } from 'express'
+import { NextFunction, Request } from 'express'
 import { TenantInputType, TenantPageType } from './tenant.schema'
 import { convertPageParam, PrismaHelper } from '../../helper/prisma.helper'
 import { BizError } from '../../common/error'
-import { httpOk } from '../../app'
 
 // 创建租户
-const create = async (req: Request, res: Response) => {
+const create = async (req: Request) => {
   const tenantInfo: TenantInputType = req.body
 
   const tenantExist = await PrismaHelper.tenant.findFirst({
@@ -21,11 +20,11 @@ const create = async (req: Request, res: Response) => {
     data: tenantInfo
   })
 
-  httpOk(res)
+  return
 }
 
 // 修改租户
-const modify = async (req: Request, res: Response) => {
+const modify = async (req: Request) => {
   const tenantInfo: TenantInputType = req.body
 
   const tenantExist = await PrismaHelper.tenant.findFirst({
@@ -46,12 +45,11 @@ const modify = async (req: Request, res: Response) => {
     },
     data: tenantInfo
   })
-
-  httpOk(res)
+  return
 }
 
 // 删除租户
-const remove = async (req: Request, res: Response) => {
+const remove = async (req: Request) => {
   const id = Number(req.params.id)
   await PrismaHelper.tenant.update({
     where: {
@@ -62,11 +60,11 @@ const remove = async (req: Request, res: Response) => {
       delFlag: 1
     }
   })
-  httpOk(res)
+  return
 }
 
 // 分页查询
-const page = async (req: Request, res: Response) => {
+const page = async (req: Request) => {
   const { pageNo, pageSize, companyName, contactName, status } = req.query as unknown as TenantPageType
   const pageParam = convertPageParam(pageNo, pageSize)
   const condition = {
@@ -101,14 +99,14 @@ const page = async (req: Request, res: Response) => {
     })
   ])
 
-  httpOk(res, {
+  return {
     total,
     records
-  })
+  }
 }
 
 // 获取租户详情
-const info = async (req: Request, res: Response) => {
+const info = async (req: Request) => {
   const id = Number(req.params.id)
   const tenantInfo = await PrismaHelper.tenant.findUnique({
     where: {
@@ -130,7 +128,8 @@ const info = async (req: Request, res: Response) => {
       status: true
     }
   })
-  httpOk(res, tenantInfo)
+
+  return tenantInfo
 }
 
 // * 租户处理

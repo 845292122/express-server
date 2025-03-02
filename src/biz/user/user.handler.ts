@@ -1,12 +1,11 @@
-import { Request, Response } from 'express'
+import { Request } from 'express'
 import { UserInputType, UserPageType } from './user.schema'
 import { convertPageParam, PrismaHelper } from '../../helper/prisma.helper'
 import { BizError } from '../../common/error'
 import bcrypt from 'bcryptjs'
 import { Constant } from '../../common/constant'
-import { httpOk } from '../../app'
 
-const create = async (req: Request, res: Response) => {
+const create = async (req: Request) => {
   const userInfo: UserInputType = req.body
 
   const userExist = await PrismaHelper.user.findFirst({
@@ -24,10 +23,10 @@ const create = async (req: Request, res: Response) => {
     data: userInfo
   })
 
-  httpOk(res)
+  return
 }
 
-const modify = async (req: Request, res: Response) => {
+const modify = async (req: Request) => {
   const userInfo: UserInputType = req.body
 
   const userExist = await PrismaHelper.user.findFirst({
@@ -50,10 +49,10 @@ const modify = async (req: Request, res: Response) => {
     data: userInfo
   })
 
-  httpOk(res)
+  return
 }
 
-const remove = async (req: Request, res: Response) => {
+const remove = async (req: Request) => {
   const id = Number(req.params.id)
   // TODO 校验用户是否在当前租户下
   await PrismaHelper.user.update({
@@ -65,10 +64,10 @@ const remove = async (req: Request, res: Response) => {
       delFlag: 1
     }
   })
-  httpOk(res)
+  return
 }
 
-const page = async (req: Request, res: Response) => {
+const page = async (req: Request) => {
   const { pageNo, pageSize, nickname, status } = req.query as unknown as UserPageType
   const pageParam = convertPageParam(pageNo, pageSize)
   const condition = {
@@ -93,13 +92,13 @@ const page = async (req: Request, res: Response) => {
     })
   ])
 
-  httpOk(res, {
+  return {
     total,
     records
-  })
+  }
 }
 
-const info = async (req: Request, res: Response) => {
+const info = async (req: Request) => {
   const id = Number(req.params.id)
   const userInfo = await PrismaHelper.user.findUnique({
     where: {
@@ -115,7 +114,7 @@ const info = async (req: Request, res: Response) => {
       remark: true
     }
   })
-  httpOk(res, userInfo)
+  return userInfo
 }
 
 export default {
