@@ -1,4 +1,4 @@
-# airy-server
+# express-server
 
 基于 express+prisma+mysql 的 nodejs 后端saas权限服务
 
