@@ -87,7 +87,8 @@ const page = async (req: Request) => {
         nickname: true,
         phone: true,
         status: true,
-        remark: true
+        remark: true,
+        isMaster: true
       },
       ...pageParam
     })
