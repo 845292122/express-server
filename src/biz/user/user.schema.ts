@@ -6,6 +6,7 @@ export const userInputSchema = z.object({
     tenantID: z.coerce.number(),
     username: z.coerce.string().trim().min(1, { message: '用户名不能为空' }),
     password: z.coerce.string().nullish(),
+    phone: z.coerce.string().trim().min(1, { message: '手机号不能为空' }),
     nickname: z.coerce.string().trim().min(1, { message: '用户名不能为空' }),
     isPlatformAdmin: z.coerce.number().optional().default(0),
     isMaster: z.coerce.number().optional().default(0),

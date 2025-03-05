@@ -85,6 +85,7 @@ const page = async (req: Request) => {
         id: true,
         username: true,
         nickname: true,
+        email: true,
         phone: true,
         status: true,
         remark: true,
