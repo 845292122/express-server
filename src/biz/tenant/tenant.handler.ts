@@ -111,7 +111,8 @@ const info = async (req: Request) => {
   const id = Number(req.params.id)
   const tenantInfo = await PrismaUtil.tenant.findUnique({
     where: {
-      id
+      id,
+      delFlag: 0
     },
     select: {
       id: true,
@@ -133,11 +134,26 @@ const info = async (req: Request) => {
   return tenantInfo
 }
 
+// 获取租户列表
+const list = async (req: Request) => {
+  return await PrismaUtil.tenant.findMany({
+    where: {
+      delFlag: 0
+    },
+    select: {
+      id: true,
+      companyName: true,
+      isPremium: true
+    }
+  })
+}
+
 // * 租户处理
 export default {
   create,
   modify,
   remove,
   page,
-  info
+  info,
+  list
 }

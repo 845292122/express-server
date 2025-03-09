@@ -10,5 +10,6 @@ router.post('/modify', rateLimiter(), validate(tenantInputSchema), reply(tenantH
 router.post('/remove/:id', rateLimiter(), reply(tenantHandler.remove))
 router.get('/page', rateLimiter(), validate(tenantPageSchema), reply(tenantHandler.page))
 router.get('/info/:id', rateLimiter(), reply(tenantHandler.info))
+router.get('/list', rateLimiter(), reply(tenantHandler.list))
 
 export default router

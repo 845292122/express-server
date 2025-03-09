@@ -101,7 +101,6 @@ const page = async (req: Request) => {
   }
 }
 
-// TODO 返回租户信息
 const info = async (req: Request) => {
   const id = Number(req.params.id)
   const userInfo = await PrismaUtil.user.findUnique({
@@ -111,6 +110,7 @@ const info = async (req: Request) => {
     },
     select: {
       id: true,
+      tenantID: true,
       username: true,
       nickname: true,
       phone: true,
