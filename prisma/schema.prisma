@@ -67,8 +67,8 @@ model User {
   delFlag         Int       @default(0) @db.TinyInt //逻辑删除
   createdAt       DateTime  @default(dbgenerated("NOW()")) @db.Timestamp //创建时间
   updatedAt       DateTime  @default(dbgenerated("NOW() ON UPDATE NOW()")) @db.Timestamp //最后更新时间
-  tenantID        Int       @db.UnsignedInt //租户关联ID
-  tenant          Tenant    @relation(fields: [tenantID], references: [id])
+  tenantID        Int?      @db.UnsignedInt //租户关联ID
+  tenant          Tenant?   @relation(fields: [tenantID], references: [id])
   Perm            Perm[]
 
   @@index([username, nickname, isPlatformAdmin, isMaster, status])
