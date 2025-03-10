@@ -9,12 +9,12 @@ import { Request } from 'express'
 
 // * 本地策略 (登录时用)
 passport.use(
-  new LocalStrategy({ usernameField: 'username', passwordField: 'password' }, async (username, password, done) => {
+  new LocalStrategy({ usernameField: 'phone', passwordField: 'password' }, async (phone, password, done) => {
     try {
       const user = await PrismaUtil.user.findFirst({
         where: {
           delFlag: 0,
-          username
+          phone
         }
       })
 
@@ -43,13 +43,16 @@ passport.use(
       try {
         const user = await PrismaUtil.user.findUnique({ where: { delFlag: 0, id: payload.id } })
         if (!user) {
-          return done(new BizError('无效的JWT～'))
+          return done(new BizError('无效的JWT'))
         }
-        // TODO 用户状态判断
+
+        if (user.status === 0) {
+          return done(new BizError('用户已被禁用'))
+        }
 
         const ip = payload.ip
         if (ip !== req.ip) {
-          return done(new BizError('无效的JWT～~'))
+          return done(new BizError('无效的JWT'))
         }
         return done(null, user)
       } catch (err) {

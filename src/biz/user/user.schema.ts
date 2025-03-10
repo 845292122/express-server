@@ -4,7 +4,6 @@ export const userInputSchema = z.object({
   body: z.object({
     id: z.coerce.number().optional(),
     tenantID: z.coerce.number({ message: '请输入正确的租户ID' }).nullish(),
-    username: z.coerce.string().trim().min(1, { message: '用户名不能为空' }),
     password: z.coerce.string().nullish(),
     phone: z.coerce.string().trim().min(1, { message: '手机号不能为空' }),
     nickname: z.coerce.string().trim().min(1, { message: '联系人不能为空' }),

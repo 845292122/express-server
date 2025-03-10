@@ -51,14 +51,13 @@ model Tenant {
 /// 用户表
 model User {
   id              Int       @id @default(autoincrement()) @db.UnsignedInt //主键
-  username        String?   @db.VarChar(50) //用户名
+  phone           String?   @db.VarChar(20) //  手机号
   password        String?   @db.VarChar(255) //密码
   nickname        String?   @db.VarChar(100) //昵称
   isPlatformAdmin Int?      @default(0) @db.TinyInt //是否平台管理员, 1: 是; 0: 否
   isMaster        Int?      @default(0) @db.TinyInt //是否主账号 1: 是; 0: 否
   dataScope       Int?      @db.TinyInt //数据权限 1: 全部数据权限 2: 本人数据权限 3: 自定义数据权限
   email           String?   @db.VarChar(50) //邮箱
-  phone           String?   @db.VarChar(20) //  手机号
   avatar          String?   @db.VarChar(255) //头像
   status          Int?      @default(1) @db.TinyInt //状态 1: 正常; 2: 禁用
   loginIP         String?   @db.VarChar(255) //最后登录IP
@@ -71,7 +70,7 @@ model User {
   tenant          Tenant?   @relation(fields: [tenantID], references: [id])
   Perm            Perm[]
 
-  @@index([username, nickname, isPlatformAdmin, isMaster, status])
+  @@index([phone, nickname, isPlatformAdmin, isMaster, status])
   @@map("user")
 }
 

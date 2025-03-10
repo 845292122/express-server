@@ -12,7 +12,7 @@ const create = async (req: Request) => {
   const userExist = await PrismaUtil.user.findFirst({
     where: {
       delFlag: 0,
-      username: userInfo.username,
+      phone: userInfo.phone,
       tenantID: userInfo.tenantID
     }
   })
@@ -33,7 +33,7 @@ const modify = async (req: Request) => {
   const userExist = await PrismaUtil.user.findFirst({
     where: {
       delFlag: 0,
-      username: userInfo.username,
+      phone: userInfo.phone,
       tenantID: userInfo.tenantID,
       id: {
         not: userInfo.id
@@ -83,7 +83,6 @@ const page = async (req: Request) => {
       where: condition,
       select: {
         id: true,
-        username: true,
         nickname: true,
         email: true,
         phone: true,
@@ -111,7 +110,6 @@ const info = async (req: Request) => {
     select: {
       id: true,
       tenantID: true,
-      username: true,
       nickname: true,
       phone: true,
       status: true,
