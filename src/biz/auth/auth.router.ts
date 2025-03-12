@@ -1,14 +1,13 @@
 import { Request, Router } from 'express'
 import passport from 'passport'
 import { JwtUtil } from '../../utils/jwt.util'
-import { validate, reply } from '../../middleware'
+import { validate, reply, jwtAuth } from '../../middleware'
 import { authLoginSchema } from './auth.schema'
 import { BizError } from '../../common/error'
 
 const router = Router()
 
 // * 登录
-// TODO: 待测试
 router.post(
   '/login',
   validate(authLoginSchema),
@@ -18,6 +17,12 @@ router.post(
     const token = JwtUtil.generateToken(req.user, req.ip)
     return token
   })
+)
+
+router.get(
+  '/info',
+  jwtAuth,
+  reply(async (req: Request) => {})
 )
 
 export default router

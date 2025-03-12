@@ -4,8 +4,7 @@ import { convertPageParam } from '../../utils/common.util'
 import { PrismaUtil } from '../../utils/prisma.util'
 import { BizError } from '../../common/error'
 
-// 创建租户
-const create = async (req: Request) => {
+export async function createTenant(req: Request) {
   const tenantInfo: TenantInputType = req.body
 
   const tenantExist = await PrismaUtil.tenant.findFirst({
@@ -24,8 +23,7 @@ const create = async (req: Request) => {
   return
 }
 
-// 修改租户
-const modify = async (req: Request) => {
+export async function modifyTenant(req: Request) {
   const tenantInfo: TenantInputType = req.body
 
   const tenantExist = await PrismaUtil.tenant.findFirst({
@@ -49,8 +47,7 @@ const modify = async (req: Request) => {
   return
 }
 
-// 删除租户
-const remove = async (req: Request) => {
+export async function removeTenant(req: Request) {
   const id = Number(req.params.id)
   await PrismaUtil.tenant.update({
     where: {
@@ -64,8 +61,7 @@ const remove = async (req: Request) => {
   return
 }
 
-// 分页查询
-const page = async (req: Request) => {
+export async function getTenantPage(req: Request) {
   const { pageNo, pageSize, companyName, contactName, status } = req.query as unknown as TenantPageType
   const pageParam = convertPageParam(pageNo, pageSize)
   const condition = {
@@ -106,8 +102,7 @@ const page = async (req: Request) => {
   }
 }
 
-// 获取租户详情
-const info = async (req: Request) => {
+export async function getTenantInfo(req: Request) {
   const id = Number(req.params.id)
   const tenantInfo = await PrismaUtil.tenant.findUnique({
     where: {
@@ -134,8 +129,7 @@ const info = async (req: Request) => {
   return tenantInfo
 }
 
-// 获取租户列表
-const list = async (req: Request) => {
+export async function getTenantList(req: Request) {
   return await PrismaUtil.tenant.findMany({
     where: {
       delFlag: 0
@@ -146,14 +140,4 @@ const list = async (req: Request) => {
       isPremium: true
     }
   })
-}
-
-// * 租户处理
-export default {
-  create,
-  modify,
-  remove,
-  page,
-  info,
-  list
 }

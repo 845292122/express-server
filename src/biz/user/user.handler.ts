@@ -6,7 +6,7 @@ import { BizError } from '../../common/error'
 import bcrypt from 'bcryptjs'
 import { Constant } from '../../common/constant'
 
-const create = async (req: Request) => {
+export async function createUser(req: Request) {
   const userInfo: UserInputType = req.body
 
   const userExist = await PrismaUtil.user.findFirst({
@@ -27,7 +27,7 @@ const create = async (req: Request) => {
   return
 }
 
-const modify = async (req: Request) => {
+export async function modifyUser(req: Request) {
   const userInfo: UserInputType = req.body
 
   const userExist = await PrismaUtil.user.findFirst({
@@ -53,7 +53,7 @@ const modify = async (req: Request) => {
   return
 }
 
-const remove = async (req: Request) => {
+export async function removeUser(req: Request) {
   const id = Number(req.params.id)
   // TODO 校验用户是否在当前租户下
   await PrismaUtil.user.update({
@@ -68,7 +68,7 @@ const remove = async (req: Request) => {
   return
 }
 
-const page = async (req: Request) => {
+export async function getUserPage(req: Request) {
   const { pageNo, pageSize, nickname, status } = req.query as unknown as UserPageType
   const pageParam = convertPageParam(pageNo, pageSize)
   const condition = {
@@ -100,7 +100,7 @@ const page = async (req: Request) => {
   }
 }
 
-const info = async (req: Request) => {
+export async function getUserInfo(req: Request) {
   const id = Number(req.params.id)
   const userInfo = await PrismaUtil.user.findUnique({
     where: {
@@ -118,12 +118,4 @@ const info = async (req: Request) => {
     }
   })
   return userInfo
-}
-
-export default {
-  create,
-  modify,
-  remove,
-  page,
-  info
 }
