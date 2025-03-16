@@ -90,7 +90,9 @@ export async function getTenantPage(req: Request) {
         trialEndDate: true,
         startDate: true,
         endDate: true,
-        status: true
+        status: true,
+        userCount: true,
+        domain: true
       },
       ...pageParam
     })
