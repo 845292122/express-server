@@ -1,5 +1,5 @@
 import { Request } from 'express'
-import { TenantInputType, TenantPageType } from './tenant.schema'
+import { TenantInputType, TenantPageType } from '../schema/tenant.schema'
 import { convertPageParam } from '../../utils/common.util'
 import { PrismaUtil } from '../../utils/prisma.util'
 import { BizError } from '../../common/error'
@@ -124,7 +124,9 @@ export async function getTenantInfo(req: Request) {
       trialEndDate: true,
       startDate: true,
       endDate: true,
-      status: true
+      status: true,
+      userCount: true,
+      domain: true
     }
   })
 

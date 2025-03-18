@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import { rateLimiter, validate, reply } from '../../middleware'
-import { userInputSchema, userPageSchema } from './user.schema'
-import { createUser, modifyUser, removeUser, getUserPage, getUserInfo } from './user.handler'
+import { userInputSchema, userPageSchema } from '../schema/user.schema'
+import { createUser, modifyUser, removeUser, getUserPage, getUserInfo } from '../handler/user.handler'
 
 const router = Router()
 

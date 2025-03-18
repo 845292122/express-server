@@ -1,5 +1,5 @@
 import { Request } from 'express'
-import { UserInputType, UserPageType } from './user.schema'
+import { UserInputType, UserPageType } from '../schema/user.schema'
 import { convertPageParam } from '../../utils/common.util'
 import { PrismaUtil } from '../../utils/prisma.util'
 import { BizError } from '../../common/error'
@@ -114,7 +114,8 @@ export async function getUserInfo(req: Request) {
       phone: true,
       status: true,
       remark: true,
-      isMaster: true
+      isMaster: true,
+      email: true
     }
   })
   return userInfo

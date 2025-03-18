@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import { rateLimiter, validate, reply } from '../../middleware'
-import { tenantInputSchema, tenantPageSchema } from './tenant.schema'
-import { createTenant, modifyTenant, removeTenant, getTenantInfo, getTenantList, getTenantPage } from './tenant.handler'
+import { tenantInputSchema, tenantPageSchema } from '../schema/tenant.schema'
+import { createTenant, modifyTenant, removeTenant, getTenantInfo, getTenantList, getTenantPage } from '../handler/tenant.handler'
 
 const router = Router()
 

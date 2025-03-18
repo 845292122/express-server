@@ -2,9 +2,9 @@ import { Request, Router } from 'express'
 import passport from 'passport'
 import { JwtUtil } from '../../utils/jwt.util'
 import { validate, reply, jwtAuth } from '../../middleware'
-import { authLoginSchema } from './auth.schema'
+import { authLoginSchema } from '../schema/auth.schema'
 import { BizError } from '../../common/error'
-import { getAuthInfo } from './auth.handler'
+import { getAuthInfo } from '../handler/auth.handler'
 
 const router = Router()
 
