@@ -1,8 +1,10 @@
 import { Request } from 'express'
-import { TenantInputType, TenantPageType } from '../schema/tenant.schema'
+import { AssignTenantPermsType, TenantInputType, TenantPageType } from '../schema/tenant.schema'
 import { convertPageParam } from '../../utils/common.util'
 import { PrismaUtil } from '../../utils/prisma.util'
 import { BizError } from '../../common/error'
+import { assignPerm, getPerms } from '../service/perm.service'
+import { Constant } from '../../common/constant'
 
 export async function createTenant(req: Request) {
   const tenantInfo: TenantInputType = req.body
@@ -144,4 +146,17 @@ export async function getTenantList(req: Request) {
       isPremium: true
     }
   })
+}
+
+export async function assignTenantPerms(req: Request) {
+  const assignPermInfo: AssignTenantPermsType = req.body
+  const { perms, id } = assignPermInfo
+  await assignPerm(perms, id, Constant.OwnerType.TENANT)
+  return
+}
+
+export async function getTenantPerms(req: Request) {
+  const id = Number(req.params.id)
+  const permsInfo = await getPerms(id, Constant.OwnerType.TENANT)
+  return permsInfo?.perms ?? []
 }

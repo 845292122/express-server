@@ -26,5 +26,13 @@ export const userPageSchema = z.object({
   })
 })
 
+export const assignUserPermsSchema = z.object({
+  body: z.object({
+    id: z.coerce.number({ required_error: '请输入正确的用户ID' }),
+    perms: z.string().array()
+  })
+})
+
 export type UserInputType = z.infer<typeof userInputSchema>['body']
 export type UserPageType = z.infer<typeof userPageSchema>['query']
+export type AssignUserPermsType = z.infer<typeof assignUserPermsSchema>['body']

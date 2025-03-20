@@ -1,10 +1,11 @@
 import { Request } from 'express'
-import { UserInputType, UserPageType } from '../schema/user.schema'
+import { AssignUserPermsType, UserInputType, UserPageType } from '../schema/user.schema'
 import { convertPageParam } from '../../utils/common.util'
 import { PrismaUtil } from '../../utils/prisma.util'
 import { BizError } from '../../common/error'
 import bcrypt from 'bcryptjs'
 import { Constant } from '../../common/constant'
+import { assignPerm, getPerms } from '../service/perm.service'
 
 export async function createUser(req: Request) {
   const userInfo: UserInputType = req.body
@@ -119,4 +120,17 @@ export async function getUserInfo(req: Request) {
     }
   })
   return userInfo
+}
+
+export async function assignUserPerms(req: Request) {
+  // TODO 租户只能设置自己拥有的权限
+  const assignPermInfo: AssignUserPermsType = req.body
+  await assignPerm(assignPermInfo.perms, assignPermInfo.id, Constant.OwnerType.USER)
+  return
+}
+
+export async function getUserPerms(req: Request) {
+  // TODO 租户只能获取自己拥有的权限
+  const id = Number(req.params.id)
+  return await getPerms(id, Constant.OwnerType.USER)
 }

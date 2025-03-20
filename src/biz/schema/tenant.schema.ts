@@ -33,5 +33,13 @@ export const tenantPageSchema = z.object({
   })
 })
 
+export const assignTenantPermsSchema = z.object({
+  body: z.object({
+    id: z.coerce.number({ required_error: '请输入正确的租户ID' }),
+    perms: z.string().array()
+  })
+})
+
 export type TenantInputType = z.infer<typeof tenantInputSchema>['body']
 export type TenantPageType = z.infer<typeof tenantPageSchema>['query']
+export type AssignTenantPermsType = z.infer<typeof assignTenantPermsSchema>['body']
