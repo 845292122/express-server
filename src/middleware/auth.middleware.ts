@@ -22,7 +22,9 @@ passport.use(
         return done(new BizError('无效的用户名或密码'))
       }
 
-      // TODO 用户状态判断
+      if (user.status === 0) {
+        return done(new BizError('用户已被禁用'))
+      }
 
       return done(null, user)
     } catch (err) {
