@@ -25,14 +25,6 @@ export async function getAuthInfo(req: Request) {
       isPlatformAdmin: true
     }
   })
-  return authInfo
-}
-
-export async function getAuthPerms(req: Request) {
-  const userId = (req.user as JwtPayloadType)?.id
-  if (!userId) {
-    throw new UnauthorizedError('token已失效')
-  }
 
   const { perms } =
     (await PrismaUtil.perm.findFirst({
@@ -45,5 +37,8 @@ export async function getAuthPerms(req: Request) {
       }
     })) ?? {}
 
-  return perms
+  return {
+    info: authInfo,
+    perms
+  }
 }
