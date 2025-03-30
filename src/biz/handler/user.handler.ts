@@ -6,9 +6,12 @@ import { BizError } from '../../common/error'
 import bcrypt from 'bcryptjs'
 import { Constant } from '../../common/constant'
 import { assignPerm, getPerms } from '../service/perm.service'
+import { verifyUserCount } from '../service/user.service'
 
 export async function createUser(req: Request) {
   const userInfo: UserInputType = req.body
+
+  await verifyUserCount(userInfo)
 
   const userExist = await PrismaUtil.user.findFirst({
     where: {
@@ -30,6 +33,8 @@ export async function createUser(req: Request) {
 
 export async function modifyUser(req: Request) {
   const userInfo: UserInputType = req.body
+
+  await verifyUserCount(userInfo)
 
   const userExist = await PrismaUtil.user.findFirst({
     where: {
@@ -116,7 +121,8 @@ export async function getUserInfo(req: Request) {
       status: true,
       remark: true,
       isMaster: true,
-      email: true
+      email: true,
+      dataScope: true
     }
   })
   return userInfo

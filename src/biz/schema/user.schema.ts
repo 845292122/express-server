@@ -3,9 +3,12 @@ import { z } from 'zod'
 export const userInputSchema = z.object({
   body: z.object({
     id: z.coerce.number().optional(),
-    tenantID: z.coerce.number({ message: '请输入正确的租户ID' }).nullish(),
+    tenantID: z.coerce.number({ message: '请输入正确的租户ID' }),
     password: z.coerce.string().nullish(),
-    phone: z.coerce.string().trim().min(1, { message: '手机号不能为空' }),
+    phone: z.coerce
+      .string()
+      .trim()
+      .regex(/^1[3-9]\d{9}$/, { message: '请输入正确的手机号' }),
     nickname: z.coerce.string().trim().min(1, { message: '联系人不能为空' }),
     isPlatformAdmin: z.coerce.number().optional().default(0),
     isMaster: z.coerce.number().optional().default(0),
