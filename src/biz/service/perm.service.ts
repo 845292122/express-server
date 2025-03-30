@@ -4,8 +4,10 @@ import { PrismaUtil } from '../../utils/prisma.util'
 export async function assignPerm(perms: string[], ownerId: number, ownerType: number) {
   await PrismaUtil.perm.upsert({
     where: {
-      ownerId,
-      ownerType
+      ownerId_ownerType: {
+        ownerId,
+        ownerType
+      }
     },
     create: {
       ownerId,

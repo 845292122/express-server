@@ -138,5 +138,6 @@ export async function assignUserPerms(req: Request) {
 export async function getUserPerms(req: Request) {
   // TODO 租户只能获取自己拥有的权限
   const id = Number(req.params.id)
-  return await getPerms(id, Constant.OwnerType.USER)
+  const permsInfo = await getPerms(id, Constant.OwnerType.USER)
+  return permsInfo?.perms ?? []
 }

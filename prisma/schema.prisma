@@ -11,6 +11,7 @@
 // npx prisma format 格式化schema
 // npx prisma migrate dev --name init 初始化数据库
 // npx prisma generate  重新生成Prisma Client
+// npx prisma db push 同步数据库，不会删除数据
 
 generator client {
   provider = "prisma-client-js"
@@ -75,12 +76,13 @@ model User {
 /// 权限表
 model Perm {
   id        Int      @id @default(autoincrement()) @db.UnsignedInt //主键
-  ownerId   Int?     @unique @db.UnsignedInt //租户或用户的 ID
+  ownerId   Int?     @db.UnsignedInt //租户或用户的 ID
   ownerType Int?     @db.TinyInt //权限类型 1: 租户 2: 用户
   perms     Json?    @db.Json //权限
   createdAt DateTime @default(dbgenerated("NOW()")) @db.Timestamp //创建时间
   updatedAt DateTime @default(dbgenerated("NOW() ON UPDATE NOW()")) @db.Timestamp //最后更新时间
 
+  @@unique([ownerId, ownerType])
   @@index([ownerId, ownerType])
   @@map("perm")
 }
