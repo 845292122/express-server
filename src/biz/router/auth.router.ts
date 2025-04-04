@@ -4,7 +4,7 @@ import { JwtUtil } from '../../utils/jwt.util'
 import { validate, reply, jwtAuth } from '../../middleware'
 import { authLoginSchema } from '../schema/auth.schema'
 import { BizError } from '../../common/error'
-import { getAuthInfo } from '../handler/auth.handler'
+import { getAuthInfo, updateAuthInfo } from '../handler/auth.handler'
 
 const router = Router()
 
@@ -21,5 +21,6 @@ router.post(
 )
 
 router.get('/info', jwtAuth, reply(getAuthInfo))
+router.post('/update', jwtAuth, reply(updateAuthInfo))
 
 export default router

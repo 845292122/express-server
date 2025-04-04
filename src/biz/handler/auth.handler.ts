@@ -1,15 +1,12 @@
 import { Request } from 'express'
-import { JwtPayloadType } from '../../utils/jwt.util'
 import { PrismaUtil } from '../../utils/prisma.util'
-import { UnauthorizedError } from '../../common/error'
+import { BizError } from '../../common/error'
 import { Constant } from '../../common/constant'
+import { AuthInfoType } from '../schema/auth.schema'
+import { AuthUtil } from '../../utils/auth.util'
 
 export async function getAuthInfo(req: Request) {
-  const userId = (req.user as JwtPayloadType)?.id
-
-  if (!userId) {
-    throw new UnauthorizedError('token已失效')
-  }
+  const userId = AuthUtil.getUserId(req)
 
   const authInfo = await PrismaUtil.user.findUnique({
     where: {
@@ -41,4 +38,31 @@ export async function getAuthInfo(req: Request) {
     info: authInfo,
     perms
   }
+}
+
+export async function updateAuthInfo(req: Request) {
+  const authInfo: AuthInfoType = req.body
+  const userId = AuthUtil.getUserId(req)
+
+  const userExist = await PrismaUtil.user.findFirst({
+    where: {
+      delFlag: 0,
+      phone: authInfo.phone,
+      tenantID: authInfo.tenantID,
+      id: {
+        not: userId
+      }
+    }
+  })
+
+  if (userExist) throw new BizError('手机号已存在')
+
+  await PrismaUtil.user.update({
+    where: {
+      id: userId
+    },
+    data: authInfo
+  })
+
+  return
 }

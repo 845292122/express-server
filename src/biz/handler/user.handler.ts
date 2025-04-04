@@ -47,7 +47,7 @@ export async function modifyUser(req: Request) {
     }
   })
 
-  if (userExist) throw new BizError('用户名已存在')
+  if (userExist) throw new BizError('手机号已存在')
 
   await PrismaUtil.user.update({
     where: {
