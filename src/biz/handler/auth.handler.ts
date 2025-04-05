@@ -4,6 +4,7 @@ import { BizError } from '../../common/error'
 import { Constant } from '../../common/constant'
 import { AuthInfoType } from '../schema/auth.schema'
 import { AuthUtil } from '../../utils/auth.util'
+import bcrypt from 'bcryptjs'
 
 export async function getAuthInfo(req: Request) {
   const userId = AuthUtil.getUserId(req)
@@ -80,4 +81,32 @@ export async function updateAuthInfo(req: Request) {
       email: true
     }
   })
+}
+
+export async function updatePassword(req: Request) {
+  const { oldPassword, newPassword } = req.body
+  const userId = AuthUtil.getUserId(req)
+
+  const user = await PrismaUtil.user.findUnique({
+    where: {
+      id: userId,
+      delFlag: 0
+    },
+    select: {
+      password: true
+    }
+  })
+
+  if (!user?.password || !bcrypt.compareSync(oldPassword, user.password)) throw new BizError('旧密码错误')
+
+  await PrismaUtil.user.update({
+    where: {
+      id: userId,
+      delFlag: 0
+    },
+    data: {
+      password: bcrypt.hashSync(newPassword)
+    }
+  })
+  return
 }
