@@ -19,7 +19,8 @@ export async function getAuthInfo(req: Request) {
       status: true,
       remark: true,
       isMaster: true,
-      isPlatformAdmin: true
+      isPlatformAdmin: true,
+      email: true
     }
   })
 
@@ -64,5 +65,19 @@ export async function updateAuthInfo(req: Request) {
     data: authInfo
   })
 
-  return
+  return await PrismaUtil.user.findUnique({
+    where: {
+      id: userId
+    },
+    select: {
+      id: true,
+      nickname: true,
+      phone: true,
+      status: true,
+      remark: true,
+      isMaster: true,
+      isPlatformAdmin: true,
+      email: true
+    }
+  })
 }
